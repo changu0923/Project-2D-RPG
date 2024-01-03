@@ -18,6 +18,11 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer; 
     Animator animator;
+
+    // 발판제어용 변수
+    bool isJumping;
+    PlatformControl currentPlatform;
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,8 +32,8 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        moveSpeed = 2f;
-        jumpPower = 5f;
+        moveSpeed = 1.5f;
+        jumpPower = 5f; // 4.5f;
     }   
     private void Update()
     {
@@ -54,5 +59,25 @@ public class Player : MonoBehaviour
         {            
             rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
         }
+
+        if(Input.GetKeyDown(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.DownArrow))
+        {
+
+        }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Platform"))
+        {
+            currentPlatform = collision.transform.GetComponent<PlatformControl>();
+            currentPlatform.JumpDown();
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        currentPlatform = null;
+    }
+
+
 }
