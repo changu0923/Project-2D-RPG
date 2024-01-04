@@ -7,6 +7,7 @@ public class MageSkills : Skill
     public GameObject fireArrowPrefab;
     public GameObject fireArrowBasePrefab;
     public Transform shotPoint;
+    public Transform bodyEffectPoint;
 
     bool isCoolTime;
     bool isTeleport;
