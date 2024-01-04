@@ -5,20 +5,28 @@ using UnityEngine;
 public class PlatformControl : MonoBehaviour
 {    
     EdgeCollider2D edgeCollider;
+    PlatformEffector2D effector;
     void Start()
     {
-        edgeCollider = GetComponent<EdgeCollider2D>();
-        edgeCollider.enabled = false;
-    }    
-
-    public void Active()
-    {
-        edgeCollider.enabled = true;
+        edgeCollider = GetComponent<EdgeCollider2D>();     
+        effector = GetComponent<PlatformEffector2D>();
     }
 
-    public void JumpDown()
+    public void PlayerUp()
     {
-        edgeCollider.enabled=false;
-        Invoke("Active", .5f);
+        effector.rotationalOffset = 0;
+    }
+
+    public void PlayerDown()
+    {
+        effector.rotationalOffset = 180;
+        StartCoroutine("PlatformDownCoolTimeCoroutine");
+    }
+
+    IEnumerator PlatformDownCoolTimeCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        PlayerUp();
+        yield return null;
     }
 }
