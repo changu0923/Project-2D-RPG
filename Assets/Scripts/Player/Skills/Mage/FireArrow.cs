@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FireArrow : MonoBehaviour
 {
-    float damage;
+    public float damage;
     public float speed = 0.5f;
     Rigidbody2D rb;
     BoxCollider2D boxCollider;
@@ -15,7 +15,6 @@ public class FireArrow : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-        damage = 50f;
     }
 
     private void Update()
@@ -26,12 +25,17 @@ public class FireArrow : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {        
         if(collision.CompareTag("Enemy") == true)
-        {            
+        {
+            int minDamage = (int)(damage - (damage * 0.1));
+            int maxDamage = (int)(damage + (damage * 0.1));
+
+            int rndDamage = Random.Range(minDamage, maxDamage);
+
             if (hitLimits != 0) 
             {
                 // 데미지 주기
                 Enemy enemy = collision.GetComponent<Enemy>();
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(rndDamage);
                 hitLimits--;
             }
             else

@@ -5,17 +5,24 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    DamagePopup popup;
+
     public int currentHP;
     public int maxHP;
 
+    private void Awake()
+    {
+        popup = GetComponent<DamagePopup>();
+    }
+
     void Start()
     {
-        maxHP = 100;
         currentHP = maxHP;
     }
    
     public void TakeDamage(float damage)
     {
+        popup.PrintDamage((int)damage);
         currentHP -= (int)damage;
 
         if (currentHP <= 0)
