@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Platform
   - Enemy
+  - Dead
   layers:
   - Default
   - TransparentFX

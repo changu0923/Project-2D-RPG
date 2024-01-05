@@ -7,6 +7,7 @@ public class FireArrow : MonoBehaviour
 {
     public float damage;
     public float speed = 0.5f;
+    public GameObject hitPrefab;
     Rigidbody2D rb;
     BoxCollider2D boxCollider;
     int hitLimits = 3;
@@ -35,6 +36,7 @@ public class FireArrow : MonoBehaviour
             {
                 // 데미지 주기
                 Enemy enemy = collision.GetComponent<Enemy>();
+                Instantiate(hitPrefab, enemy.transform.localPosition, enemy.transform.localRotation);   
                 enemy.TakeDamage(rndDamage);
                 hitLimits--;
             }

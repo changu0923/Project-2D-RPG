@@ -17,7 +17,9 @@ public class DamagePopup : MonoBehaviour
     public void PrintDamage(int damage)
     {       
         string damageText = damage.ToString();
-        
+
+        GameObject damageFontParent = new GameObject("DamageFontParent");
+
         for (int i = 0; i < damageText.Length; i++)
         {
             float ySize = 0.02f;
@@ -29,8 +31,7 @@ public class DamagePopup : MonoBehaviour
             }
             else
             {
-                ySize = -ySize;
-            
+                ySize = -ySize;            
             }
 
             Vector3 calculatedCenter = new Vector3((spacing * (damageText.Length-1))/2, 0, 0);
@@ -41,8 +42,10 @@ public class DamagePopup : MonoBehaviour
                 numberObject.transform.localScale = new Vector3(1.2f,1.2f,1.2f);
             }
             numberObject.GetComponent<SpriteRenderer>().sortingOrder = 1000 - i;
+            numberObject.transform.parent = damageFontParent.transform;
             StartCoroutine("Fly", numberObject);
         }
+        Destroy(damageFontParent, 1.6f);
     }
 
     private IEnumerator Fly(GameObject number)
