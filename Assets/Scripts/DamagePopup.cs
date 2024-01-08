@@ -41,7 +41,7 @@ public class DamagePopup : MonoBehaviour
             {
                 numberObject.transform.localScale = new Vector3(1.2f,1.2f,1.2f);
             }
-            numberObject.GetComponent<SpriteRenderer>().sortingOrder = 1000 - i;
+            numberObject.GetComponent<SpriteRenderer>().sortingOrder = 1000 + i;
             numberObject.transform.parent = damageFontParent.transform;
             StartCoroutine("Fly", numberObject);
         }

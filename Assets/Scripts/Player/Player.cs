@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    enum State
+    public enum State
     {
         IDLE,
         MOVE,
@@ -30,14 +30,19 @@ public class Player : MonoBehaviour
     public float moveSpeed;
     public float jumpPower;
 
-    private float attackCoolTime;
-
+    public bool isClimbAble = false;
+    
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer; 
     Animator animator;
     Skill skill;
 
     State state;
+
+    public void SetState(State newState)
+    {
+        state = newState;
+    }
 
     // 발판제어용 변수
     bool isJumping;
@@ -55,7 +60,7 @@ public class Player : MonoBehaviour
     {
         moveSpeed = 1.5f;
         jumpPower = 5f; // 4.5f;
-        state = State.IDLE;
+        SetState(State.IDLE);
     }   
     private void Update()
     {
@@ -64,22 +69,36 @@ public class Player : MonoBehaviour
             case State.IDLE:
                 if(Input.GetAxisRaw("Horizontal")!=0)
                 {
-                    state = State.MOVE;
+                    SetState(State.MOVE);
                 }
-
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
+                    skill.Use("MeteorShower");
+                    SetState(State.ATTACK);
+                }
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
                     skill.Use("FireArrow");
-                    attackCoolTime = 5f;
                     state = State.ATTACK;
                 }
-              
+
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    skill.Use("Teleport");
+                }
+
+                if (Input.GetKeyDown(KeyCode.LeftAlt))
+                {
+                    rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
+                    state = State.JUMP;
+                }
+
                 break;
             case State.MOVE:
                 Move();
                 break;
             case State.ATTACK:
-                StartCoroutine("WaitingForCoolTimeCoroutine");
+                SetState(State.IDLE);
                 break;
             case State.HIT:
                 break;
@@ -96,7 +115,8 @@ public class Player : MonoBehaviour
                 isJumping = true;
                 state = State.FALL;
                 break;
-            case State.CLIMB: 
+            case State.CLIMB:
+                Climb();
                 break;
             case State.LADDER: 
                 break;
@@ -135,17 +155,42 @@ public class Player : MonoBehaviour
                 currentPlatform.PlayerDown();
             }
         }
-
-        if(Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetAxisRaw("Horizontal") == 0)
         {
-            skill.Use("FireArrow");
-            attackCoolTime = 5f;
-            state = State.ATTACK;
+            state = State.IDLE;
+        }
+        if (isClimbAble == true)
+        {
+            if(Input.GetAxisRaw("Vertical") != 0)
+            {
+                SetState(State.CLIMB);
+                rb.gravityScale = 0;
+            }
+        }
+    }
+
+    public void Climb()
+    {        
+        if (Input.GetAxisRaw("Vertical") != 0)
+        {
+            float y = Input.GetAxisRaw("Vertical");       
+            rb.velocity = new Vector2(0, y * moveSpeed);
+            print($"{rb.velocity}");
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
         }
 
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
-            skill.Use("Teleport");
+            rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
+            state = State.JUMP;
+        }if(isClimbAble==false)
+        {
+            rb.gravityScale = 1;
+            rb.velocity = Vector2.zero;
+            SetState(State.FALL);
         }
     }
 
@@ -160,18 +205,5 @@ public class Player : MonoBehaviour
         {
             currentPlatform = collision.collider.GetComponent<PlatformControl>();
         }
-    }
-
-    IEnumerator WaitingForCoolTimeCoroutine()
-    {
-        rb.velocity = Vector3.zero;
-        while(attackCoolTime<=0)
-        {
-            attackCoolTime -= Time.deltaTime;
-            rb.velocity = Vector3.zero;
-        }
-        attackCoolTime = 0f;
-        state = State.IDLE;
-        yield return null;
-    }
+    }   
 }

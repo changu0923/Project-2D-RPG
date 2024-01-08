@@ -9,6 +9,7 @@ TagManager:
   - Platform
   - Enemy
   - Dead
+  - Climb
   layers:
   - Default
   - TransparentFX
