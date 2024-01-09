@@ -7,6 +7,7 @@ public class MageSkills : Skill
 {
     public GameObject fireArrowPrefab;
     public GameObject fireArrowBasePrefab;
+    public GameObject MeteorHitPrefab;
     public Transform shotPoint;
     public Transform bodyEffectPoint;
 
@@ -75,8 +76,7 @@ public class MageSkills : Skill
             if (enemyList.Count > 0)
             {
                 foreach (GameObject enemy in enemyList)
-                {
-                    print($"{enemy.name}은 메테오를 맞았습니다");
+                {                    
                     Enemy target = enemy.GetComponent<Enemy>();
                     float damage = 30000f;
                     int minDamage = (int)(damage - (damage * 0.15));
