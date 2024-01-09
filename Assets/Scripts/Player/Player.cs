@@ -132,14 +132,7 @@ public class Player : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(x * moveSpeed, rb.velocity.y);       
-        if(rb.velocity.x == 0)
-        {
-            animator.SetBool("isMoving", false);
-        }
-        else
-        {
-            animator.SetBool("isMoving", true);
-        }
+        
         spriteRenderer.flipX = x < 0;
 
         if (Input.GetKeyDown(KeyCode.LeftAlt))
