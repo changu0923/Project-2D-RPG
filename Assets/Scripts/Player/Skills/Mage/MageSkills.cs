@@ -7,7 +7,7 @@ public class MageSkills : Skill
 {
     public GameObject fireArrowPrefab;
     public GameObject fireArrowBasePrefab;
-    public GameObject MeteorHitPrefab;
+    public GameObject MeteorSkillPrefab;
     public Transform shotPoint;
     public Transform bodyEffectPoint;
 
@@ -67,25 +67,8 @@ public class MageSkills : Skill
     {
         if (isCoolTime == false)
         {
-            List<GameObject> enemyList = new List<GameObject>();    
-
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            enemyList.AddRange(enemies);
-
-            print("메테오 플레이어 이펙트 발동");
-            if (enemyList.Count > 0)
-            {
-                foreach (GameObject enemy in enemyList)
-                {                    
-                    Enemy target = enemy.GetComponent<Enemy>();
-                    float damage = 30000f;
-                    int minDamage = (int)(damage - (damage * 0.15));
-                    int maxDamage = (int)(damage + (damage * 0.15));
-
-                    int rndDamage = Random.Range(minDamage, maxDamage);
-                    target.TakeDamage(rndDamage);
-                }
-            }
+            GameObject meteor = Instantiate(MeteorSkillPrefab, gameObject.transform.position, Quaternion.identity);
+            meteor.transform.parent = gameObject.transform;
             isCoolTime = true;
             StartCoroutine(CoolTimeWaitingCoroutine(0f, 3f, 0f));
         }

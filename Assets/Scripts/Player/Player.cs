@@ -75,6 +75,7 @@ public class Player : MonoBehaviour
                 Move();
                 break;
             case State.ATTACK:
+                Attack();
                 break;
             case State.HIT:
                 break;
@@ -115,6 +116,11 @@ public class Player : MonoBehaviour
         {
             SetState(State.JUMP);
         }
+
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            skill.Use("MeteorShower");
+        }
     }
 
     void Move()
@@ -151,7 +157,8 @@ public class Player : MonoBehaviour
 
     void Attack()
     {
-        
+        SetState(State.IDLE);
+        // TODO : Attack -> 각 모션 설정 필요
     }
 
     void BowAttack()

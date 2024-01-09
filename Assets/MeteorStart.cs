@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class MeteorStart : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject fireballPrefab;
+    public GameObject parentGameobject;
+    Animator animator;
+    void StartFall()
     {
-        
-    }
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(GameObject enemy in enemies)
+        {
+            Transform targetParent = enemy.transform;
+            Transform target = enemy.GetComponent<Transform>().Find("FootPoint");
+           
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            if(target != null) 
+            {
+                GameObject fireball =  Instantiate(fireballPrefab, target.position, Quaternion.identity);
+                fireball.transform.parent = targetParent;
+            }
+        }
+    }
+    
+    void EndAnimation()
+    {        
+        Destroy(parentGameobject);
     }
 }
