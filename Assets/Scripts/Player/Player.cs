@@ -103,7 +103,7 @@ public class Player : MonoBehaviour
     // TODO : 이동, 점프, 사다리타기, 아래점프, 위로 올라가기, 눕기, 스프라이트 뒤집기
     void Idle()
     {
-        if (isMoveAble == true)
+        if (isMoveAble == true) 
         {
             if (Input.GetAxisRaw("Horizontal") != 0)
             {

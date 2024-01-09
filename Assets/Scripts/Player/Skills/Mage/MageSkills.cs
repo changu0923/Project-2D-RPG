@@ -21,6 +21,10 @@ public class MageSkills : Skill
 
     IEnumerator CoolTimeWaitingCoroutine(float startTime, float coolTime, float endTime)
     {    
+        Player player = GetComponentInParent<Player>();
+        player.isMoveAble = false;
+        yield return new WaitForSeconds(startTime);
+        player.isMoveAble = true;
         yield return new WaitForSeconds(coolTime);
         isCoolTime = false;
     }
@@ -70,7 +74,7 @@ public class MageSkills : Skill
             GameObject meteor = Instantiate(MeteorSkillPrefab, gameObject.transform.position, Quaternion.identity);
             meteor.transform.parent = gameObject.transform;
             isCoolTime = true;
-            StartCoroutine(CoolTimeWaitingCoroutine(0f, 3f, 0f));
+            StartCoroutine(CoolTimeWaitingCoroutine(1.5f, 3f, 0f));
         }
         else
         {
