@@ -7,8 +7,8 @@ public class Player : MonoBehaviour
 {
     public enum State
     {
-        IDLE,
-        MOVE,
+        IDLE = 0,
+        MOVE = 1,
         ATTACK,
         HIT,
         CROUCH,
@@ -31,22 +31,23 @@ public class Player : MonoBehaviour
     public float jumpPower;
 
     public bool isClimbAble = false;
+    bool isJumping = false;
+    bool isFacingRight = false;
     
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer; 
     Animator animator;
     Skill skill;
+    public Transform attactPointLeft;
+    public Transform attactPointRight;
+    Transform currentAttackPoint = null;
 
     State state;
 
     public void SetState(State newState)
     {
         state = newState;
-    }
-
-    // 발판제어용 변수
-    bool isJumping;
-    PlatformControl currentPlatform;
+    }   
     
     private void Awake()
     {
@@ -60,6 +61,7 @@ public class Player : MonoBehaviour
     {
         moveSpeed = 1.5f;
         jumpPower = 5f; // 4.5f;
+        rb.velocity = Vector3.zero;
         SetState(State.IDLE);
     }   
     private void Update()
@@ -67,56 +69,23 @@ public class Player : MonoBehaviour
         switch(state)
         {
             case State.IDLE:
-                if(Input.GetAxisRaw("Horizontal")!=0)
-                {
-                    SetState(State.MOVE);
-                }
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    skill.Use("MeteorShower");
-                    SetState(State.ATTACK);
-                }
-                if (Input.GetKey(KeyCode.LeftControl))
-                {
-                    skill.Use("FireArrow");
-                    state = State.ATTACK;
-                }
-
-                if (Input.GetKey(KeyCode.Space))
-                {
-                    skill.Use("Teleport");
-                }
-
-                if (Input.GetKeyDown(KeyCode.LeftAlt))
-                {
-                    rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
-                    state = State.JUMP;
-                }
-
+                Idle();
                 break;
             case State.MOVE:
                 Move();
                 break;
             case State.ATTACK:
-                SetState(State.IDLE);
                 break;
             case State.HIT:
                 break;
             case State.CROUCH:
                 break;
-            case State.FALL:
-                if (isJumping == false)
-                {
-                    rb.velocity = Vector3.zero;
-                    state = State.IDLE;
-                }
+            case State.FALL:                
                 break;
             case State.JUMP:
-                isJumping = true;
-                state = State.FALL;
+                Jump();
                 break;
             case State.CLIMB:
-                Climb();
                 break;
             case State.LADDER: 
                 break;
@@ -125,40 +94,67 @@ public class Player : MonoBehaviour
             case State.SIT:
                 break;             
         }
+        animator.SetInteger("State", (int)state);
     }
 
     // TODO : 이동, 점프, 사다리타기, 아래점프, 위로 올라가기, 눕기, 스프라이트 뒤집기
+    void Idle()
+    {
+        if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            SetState(State.MOVE);
+        }
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            skill.Use("MeteorShower");
+            SetState(State.ATTACK);
+        }
+    }
+
     void Move()
     {
         float x = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(x * moveSpeed, rb.velocity.y);       
+        rb.velocity = new Vector2(x * moveSpeed, rb.velocity.y);
         
-        spriteRenderer.flipX = x < 0;
+        if(x > 0)        { isFacingRight = true; }
+        else if(x < 0)   { isFacingRight = false;}
 
+        if (isFacingRight)
+        {
+            currentAttackPoint = attactPointRight;
+            spriteRenderer.flipX = true;
+        }
+        else if(!isFacingRight)
+        {
+            currentAttackPoint = attactPointLeft;
+            spriteRenderer.flipX = false;
+        } 
+        
+        // TO IDLE
+        if(Input.GetAxisRaw("Horizontal") == 0)
+        {
+            SetState(State.IDLE);
+        }
+
+        // TO JUMP
         if (Input.GetKeyDown(KeyCode.LeftAlt))
-        {            
-            rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
-            state = State.JUMP;
+        {
+            isJumping = true;
+            SetState(State.JUMP);
         }
+    }
 
-        if(Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.DownArrow))
+    void Jump()
+    {
+        rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
+        SetState(State.FALL);
+    }
+
+    void Fall()
+    {
+        if(isJumping==false)
         {
-            if(currentPlatform!=null) 
-            {
-                currentPlatform.PlayerDown();
-            }
-        }
-        if (Input.GetAxisRaw("Horizontal") == 0)
-        {
-            state = State.IDLE;
-        }
-        if (isClimbAble == true)
-        {
-            if(Input.GetAxisRaw("Vertical") != 0)
-            {
-                SetState(State.CLIMB);
-                rb.gravityScale = 0;
-            }
+            SetState(State.IDLE);
         }
     }
 
@@ -192,11 +188,6 @@ public class Player : MonoBehaviour
         if(collision.collider.CompareTag("Platform")|| collision.collider.CompareTag("Ground"))
         {
             isJumping = false;
-        }
-
-        if (collision.collider.CompareTag("Platform") == true)
-        {
-            currentPlatform = collision.collider.GetComponent<PlatformControl>();
-        }
+        }     
     }   
 }
