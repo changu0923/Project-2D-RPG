@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     public bool isClimbAble = false;
     public bool isJumping = false;
     public bool isFacingRight = false;
+    public bool isMoveAble;
     
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer; 
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour
         moveSpeed = 1.5f;
         jumpPower = 5f; // 4.5f;
         rb.velocity = Vector3.zero;
+        isMoveAble = true;
         SetState(State.IDLE);
     }   
     private void Update()
@@ -101,25 +103,27 @@ public class Player : MonoBehaviour
     // TODO : 이동, 점프, 사다리타기, 아래점프, 위로 올라가기, 눕기, 스프라이트 뒤집기
     void Idle()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0)
+        if (isMoveAble == true)
         {
-            SetState(State.MOVE);
-        }
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            skill.Use("MeteorShower");
-            SetState(State.ATTACK);
-        }
+            if (Input.GetAxisRaw("Horizontal") != 0)
+            {
+                SetState(State.MOVE);
+            }
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                skill.Use("MeteorShower");
+                SetState(State.ATTACK);
+            }
 
-        // TO JUMP
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
-        {
-            SetState(State.JUMP);
+            // TO JUMP
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                SetState(State.JUMP);
+            }
         }
-
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        else
         {
-            skill.Use("MeteorShower");
+            rb.velocity = Vector2.zero;
         }
     }
 
