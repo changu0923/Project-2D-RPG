@@ -70,22 +70,10 @@ public class MageSkills : Skill
     }
     private void MagicClaw()
     {
-        Vector2 direction = player.isFacingRight ? Vector2.right : Vector2.up;
-        Vector2 origin = player.currentAttackPoint.transform.position;
-        float distance = 2.5f;
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
-        player.SetAttackMotion(Player.AttackMotion.SWING);
-        if(hit.collider.CompareTag("Enemy")==true)
-        {
-            Transform target = hit.collider.GetComponent<Transform>();
-            if(target != null)
-            {
-                GameObject magicClawHit = Instantiate(MagicClawPrefab, target.position, Quaternion.identity);
-                magicClawHit.transform.parent = target.transform;
-                isCoolTime=true;
-                StartCoroutine(CoolTimeWaitingCoroutine(.05f, .05f, 0f));
-            }           
-        }
+        GameObject magicClaw = Instantiate(MagicClawPrefab, gameObject.transform.position, Quaternion.identity);
+        magicClaw.transform.parent = gameObject.transform;
+        isCoolTime = true;
+        StartCoroutine(CoolTimeWaitingCoroutine(.1f, .33f, 0f)); 
     }
 
     private void MeteorShower()

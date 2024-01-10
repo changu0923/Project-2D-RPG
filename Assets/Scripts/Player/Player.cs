@@ -191,7 +191,9 @@ public class Player : MonoBehaviour
                 BowAttack();
                 break;
             case AttackMotion.SWING:
+                int motionNumber = Random.Range(0, 4);
                 animator.SetInteger("AttackMotion", (int)attackMotion);
+                animator.SetInteger("Motion", motionNumber);
                 MagicAttack();
                 break;
         }

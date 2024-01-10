@@ -5557,6 +5557,7 @@ MonoBehaviour:
   attactPointRight: {fileID: 85622397}
   currentAttackPoint: {fileID: 0}
   state: 0
+  attackMotion: 0
 --- !u!95 &1370164282
 Animator:
   serializedVersion: 5
@@ -5610,7 +5611,7 @@ MonoBehaviour:
   fireArrowPrefab: {fileID: 97054631706878493, guid: f9624aa9b3cd78040b2f6d1f1fa49f6f, type: 3}
   fireArrowBasePrefab: {fileID: 6414164472175231190, guid: a3e8a9f27f08c5648a27f73fc59012eb, type: 3}
   MeteorSkillPrefab: {fileID: 4307452996456108236, guid: c4892ee89d6534441b7beb309d7e7479, type: 3}
-  MagicClawPrefab: {fileID: 4090166697537986458, guid: 2dc4acc2782eb1f4a92dc97d32a7770c, type: 3}
+  MagicClawPrefab: {fileID: 3092583943227583136, guid: d450a1bbb7f80cc46b352309ed03fe37, type: 3}
   shotPoint: {fileID: 85622397}
   bodyEffectPoint: {fileID: 0}
 --- !u!1 &1374610694
