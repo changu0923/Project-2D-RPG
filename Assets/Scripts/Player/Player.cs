@@ -115,6 +115,12 @@ public class Player : MonoBehaviour
                 SetState(State.ATTACK);
             }
 
+            if(Input.GetKey(KeyCode.Z)) 
+            {
+                skill.Use("MagicClaw");
+                SetState(State.ATTACK);
+            }
+
             // TO JUMP
             if (Input.GetKeyDown(KeyCode.LeftAlt))
             {
