@@ -20,6 +20,13 @@ public class Player : MonoBehaviour
         SIT     = 10,
     }
 
+    public enum AttackMotion
+    {
+        NORMAL  = 0,
+        BOW     = 1,
+        SWING   = 2,
+    }
+
     public int currentHP;
     public int currentMP;
     public int currentEXP;
@@ -44,11 +51,16 @@ public class Player : MonoBehaviour
     public Transform currentAttackPoint = null;
 
     public State state;
-
+    public AttackMotion attackMotion;
     public void SetState(State newState)
     {
         state = newState;
     }   
+
+    public void SetAttackMotion(AttackMotion newMotion)
+    {
+        attackMotion = newMotion;
+    }
     
     private void Awake()
     {
@@ -167,22 +179,36 @@ public class Player : MonoBehaviour
 
     void Attack()
     {
-        SetState(State.IDLE);
         // TODO : Attack -> 각 모션 설정 필요
+        switch(attackMotion)
+        {
+            case AttackMotion.NORMAL:
+                animator.SetInteger("AttackMotion", (int)attackMotion);
+                StandAttack();                
+                break;
+            case AttackMotion.BOW:
+                animator.SetInteger("AttackMotion", (int)attackMotion);
+                BowAttack();
+                break;
+            case AttackMotion.SWING:
+                animator.SetInteger("AttackMotion", (int)attackMotion);
+                MagicAttack();
+                break;
+        }
     }
 
     void BowAttack()
     {
-
+        SetState(State.IDLE);
     }
 
     void StandAttack()
     {
-
+        SetState(State.IDLE);
     }
     void MagicAttack()
     {
-
+        SetState(State.IDLE);
     }
 
     void Jump()

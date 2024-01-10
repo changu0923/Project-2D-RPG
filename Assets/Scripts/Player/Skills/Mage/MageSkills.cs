@@ -74,6 +74,7 @@ public class MageSkills : Skill
         Vector2 origin = player.currentAttackPoint.transform.position;
         float distance = 2.5f;
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
+        player.SetAttackMotion(Player.AttackMotion.SWING);
         if(hit.collider.CompareTag("Enemy")==true)
         {
             Transform target = hit.collider.GetComponent<Transform>();
@@ -82,7 +83,7 @@ public class MageSkills : Skill
                 GameObject magicClawHit = Instantiate(MagicClawPrefab, target.position, Quaternion.identity);
                 magicClawHit.transform.parent = target.transform;
                 isCoolTime=true;
-                StartCoroutine(CoolTimeWaitingCoroutine(.3f, .3f, 0f));
+                StartCoroutine(CoolTimeWaitingCoroutine(.05f, .05f, 0f));
             }           
         }
     }
