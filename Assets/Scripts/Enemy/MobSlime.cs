@@ -65,6 +65,7 @@ public class MobSlime : Enemy
 
     public void Die()
     {
+        gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         gameObject.tag = "Dead";
         StartCoroutine("FadeOutAndDestroy");
     }

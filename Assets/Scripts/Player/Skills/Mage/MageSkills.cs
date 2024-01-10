@@ -73,7 +73,7 @@ public class MageSkills : Skill
         GameObject magicClaw = Instantiate(MagicClawPrefab, gameObject.transform.position, Quaternion.identity);
         magicClaw.transform.parent = gameObject.transform;
         isCoolTime = true;
-        StartCoroutine(CoolTimeWaitingCoroutine(.1f, .33f, 0f)); 
+        StartCoroutine(CoolTimeWaitingCoroutine(1f, .74f, 0f)); 
     }
 
     private void MeteorShower()

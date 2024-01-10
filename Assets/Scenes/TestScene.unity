@@ -565,7 +565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 86295924}
   - component: {fileID: 86295925}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ladder03 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1362,7 +1362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 367369720}
   - component: {fileID: 367369721}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ladder04 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2419,7 +2419,7 @@ GameObject:
   - component: {fileID: 727637277}
   - component: {fileID: 727637276}
   - component: {fileID: 727637278}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ladder
   m_TagString: Climb
   m_Icon: {fileID: 0}
@@ -3754,7 +3754,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1008200996}
   - component: {fileID: 1008200997}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ladder03 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4329,7 +4329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1141987384}
   - component: {fileID: 1141987385}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ladder04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4894,7 +4894,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1195310682}
   - component: {fileID: 1195310683}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ladder03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7001,7 +7001,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1585679214}
   - component: {fileID: 1585679215}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ladder03 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7482,7 +7482,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1635535388}
   - component: {fileID: 1635535389}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ladder03 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

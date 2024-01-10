@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     public bool isJumping = false;
     public bool isFacingRight = false;
     public bool isMoveAble;
-    
+
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer; 
     Animator animator;
@@ -60,8 +60,7 @@ public class Player : MonoBehaviour
     public void SetAttackMotion(AttackMotion newMotion)
     {
         attackMotion = newMotion;
-    }
-    
+    }    
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -127,7 +126,7 @@ public class Player : MonoBehaviour
                 SetState(State.ATTACK);
             }
 
-            if(Input.GetKey(KeyCode.Z)) 
+            if(Input.GetKeyDown(KeyCode.Z)) 
             {
                 skill.Use("MagicClaw");
                 SetState(State.ATTACK);
@@ -193,7 +192,7 @@ public class Player : MonoBehaviour
             case AttackMotion.SWING:
                 int motionNumber = Random.Range(0, 4);
                 animator.SetInteger("AttackMotion", (int)attackMotion);
-                animator.SetInteger("Motion", motionNumber);
+                animator.SetInteger("Motion", motionNumber);                
                 MagicAttack();
                 break;
         }

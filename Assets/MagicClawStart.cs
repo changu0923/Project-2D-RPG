@@ -33,7 +33,7 @@ public class MagicClawStart : MonoBehaviour
         float distance = 5f;
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
         player.SetAttackMotion(Player.AttackMotion.SWING);
-        if (hit.collider.CompareTag("Enemy") == true)
+        if (hit.collider.tag == ("Enemy"))
         {
             Transform target = hit.collider.GetComponent<Transform>();
             if (target != null)
@@ -42,6 +42,11 @@ public class MagicClawStart : MonoBehaviour
                 magicClawHit.transform.parent = target.transform;
             }
         }
+        else
+        {
+            print($"MagicClaw : {hit.collider.name}");
+        }
+
     }
 
     private void AnimationEnd()
