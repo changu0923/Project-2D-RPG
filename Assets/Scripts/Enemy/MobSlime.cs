@@ -1,33 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MobSlime : Enemy
 {
-    enum SlimeState
+    public enum SlimeState
     {
-        IDLE,
-        MOVE,
-        HIT,
-        DIE,
+        IDLE    = 0,
+        MOVE    = 1,
+        HIT     = 2,
+        DIE     = 3,
     }
 
-    float behaviorTime;
+    public float moveSpeed = 1f;
 
+    float behaviorTime;
     DamagePopup popup;
     SpriteRenderer spriteRenderer;
+    Animator animator;
+    Rigidbody2D rb;
     private float lifeTime = 1f;
     SlimeState state;
 
     private void Awake()
     {
         popup = GetComponent<DamagePopup>();
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     void Start()
     {
-        maxHP = 50;
+        maxHP = 300000;
         currentHP = maxHP;
         state = SlimeState.IDLE;
     }
@@ -48,6 +54,12 @@ public class MobSlime : Enemy
             case SlimeState.DIE:
                 break;
         }
+        animator.SetInteger("SlimeState", (int)state);
+    }
+
+    public void SetState(SlimeState state)
+    {
+        this.state = state;
     }
 
 
@@ -55,7 +67,8 @@ public class MobSlime : Enemy
     {
         popup.PrintDamage((int)damage);
         currentHP -= (int)damage;
-
+        SetState(SlimeState.HIT);
+        StartCoroutine("KnockBackCoroutine");
         if (currentHP <= 0)
         {
             currentHP = 0;
@@ -84,5 +97,20 @@ public class MobSlime : Enemy
             yield return null;
         }
         Destroy(gameObject, 1f);
+    }
+
+    IEnumerator KnockBackCoroutine()
+    {
+        GameObject target = GameObject.Find("Player");
+        if (target != null)
+        {
+            Vector2 dir = ((Vector2)(target.transform.position - transform.position)).normalized * moveSpeed * 2;
+            rb.velocity = -dir;
+            yield return new WaitForSeconds(0.1f);
+            rb.velocity = new Vector2(0, 0);
+            yield return new WaitForSeconds(0.2f);
+            SetState(SlimeState.IDLE);
+            yield return null;
+        }
     }
 }

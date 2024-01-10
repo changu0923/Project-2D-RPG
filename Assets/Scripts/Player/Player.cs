@@ -128,6 +128,7 @@ public class Player : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.Z)) 
             {
+                attackMotion = AttackMotion.SWING;
                 skill.Use("MagicClaw");
                 SetState(State.ATTACK);
             }
