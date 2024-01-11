@@ -6,8 +6,9 @@ public class MagicClawStart : MonoBehaviour
 {
     Player player;
     public GameObject MagicClawPrefab;
-    SpriteRenderer spriteRenderer;
     public GameObject thisPrefab;
+    SpriteRenderer spriteRenderer;
+    
 
     private void Start()
     {
@@ -28,7 +29,7 @@ public class MagicClawStart : MonoBehaviour
     }
     void Use()
     {
-        Vector2 direction = player.isFacingRight ? Vector2.right : Vector2.up;
+        Vector2 direction = player.isFacingRight ? Vector2.right : Vector2.left;
         Vector2 origin = player.currentAttackPoint.transform.position;
         float distance = 5f;
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);

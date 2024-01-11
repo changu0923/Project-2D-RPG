@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MobSlime : Enemy
@@ -16,11 +17,15 @@ public class MobSlime : Enemy
     public float moveSpeed = 1f;
 
     float behaviorTime;
+    float lifeTime = 1f;
+    bool isHit;
+    bool isMoveable;
+
     DamagePopup popup;
     SpriteRenderer spriteRenderer;
     Animator animator;
     Rigidbody2D rb;
-    private float lifeTime = 1f;
+    
     SlimeState state;
 
     private void Awake()
@@ -43,13 +48,12 @@ public class MobSlime : Enemy
         switch (state) 
         {
             case SlimeState.IDLE:
-
+                Idle();
                 break;
             case SlimeState.MOVE:
-
+                Move();
                 break;
             case SlimeState.HIT:
-
                 break;
             case SlimeState.DIE:
                 break;
@@ -57,6 +61,40 @@ public class MobSlime : Enemy
         animator.SetInteger("SlimeState", (int)state);
     }
 
+    void Idle()
+    {
+        rb.velocity = Vector2.zero;
+        int RandomSeconds = UnityEngine.Random.Range(3, 6);
+
+    }
+
+    void Move()
+    {
+        if (isHit == true)
+        {
+            // TODO : 플레이어방향으로 이동
+            GameObject player = GameObject.Find("Player");
+            Vector2 getPlayerDir = new Vector2(player.transform.position.x-transform.position.x, rb.velocity.y);
+            rb.velocity = getPlayerDir * moveSpeed;
+        }
+        else
+        {
+            // TODO : 무지성 이동
+
+        }
+
+        // 이동하는 방향에 따라 스프라이트 뒤집기
+        if (rb.velocity.x < 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (rb.velocity.x > 0)
+        {
+            spriteRenderer.flipX = true;
+        }
+    }
+   
+   
     public void SetState(SlimeState state)
     {
         this.state = state;
@@ -67,6 +105,7 @@ public class MobSlime : Enemy
     {
         popup.PrintDamage((int)damage);
         currentHP -= (int)damage;
+        isHit = true;
         SetState(SlimeState.HIT);
         StartCoroutine("KnockBackCoroutine");
         if (currentHP <= 0)
@@ -78,6 +117,7 @@ public class MobSlime : Enemy
 
     public void Die()
     {
+        SetState(SlimeState.DIE);
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         gameObject.tag = "Dead";
         StartCoroutine("FadeOutAndDestroy");
@@ -109,8 +149,18 @@ public class MobSlime : Enemy
             yield return new WaitForSeconds(0.1f);
             rb.velocity = new Vector2(0, 0);
             yield return new WaitForSeconds(0.2f);
-            SetState(SlimeState.IDLE);
+            SetState(SlimeState.MOVE);
             yield return null;
         }
+    }
+
+    IEnumerator ChooseAction(int time)
+    {
+        if (isMoveable == true)
+        {
+            yield return new WaitForSeconds(time);
+        }
+        else
+            yield return null;
     }
 }
