@@ -25,7 +25,7 @@ public class MeteorStart : MonoBehaviour
     }
     
     void EndAnimation()
-    {        
+    {
         Destroy(parentGameobject);
     }
 }

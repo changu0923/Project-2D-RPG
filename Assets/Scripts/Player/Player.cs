@@ -41,9 +41,10 @@ public class Player : MonoBehaviour
     public bool isJumping = false;
     public bool isFacingRight = false;
     public bool isMoveAble;
+    public bool isHit;
 
     Rigidbody2D rb;
-    SpriteRenderer spriteRenderer; 
+    SpriteRenderer spriteRenderer;
     Animator animator;
     Skill skill;
     public Transform attactPointLeft;
@@ -71,10 +72,12 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        currentHP = maxHP;
+        currentMP = maxMP;
         moveSpeed = 1.5f;
         jumpPower = 5f; // 4.5f;
         rb.velocity = Vector3.zero;
-        isMoveAble = true;
+        isMoveAble = true;        
         SetState(State.IDLE);
     }   
     private void Update()
@@ -123,14 +126,15 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 skill.Use("MeteorShower");
+                SetAttackMotion(AttackMotion.NORMAL);
                 SetState(State.ATTACK);
             }
 
             if(Input.GetKeyDown(KeyCode.Z)) 
             {
                 attackMotion = AttackMotion.SWING;
-                skill.Use("MagicClaw");
                 SetState(State.ATTACK);
+                skill.Use("MagicClaw");                
             }
 
             // TO JUMP
@@ -193,8 +197,7 @@ public class Player : MonoBehaviour
             case AttackMotion.SWING:
                 int motionNumber = Random.Range(0, 4);
                 animator.SetInteger("AttackMotion", (int)attackMotion);
-                animator.SetInteger("Motion", motionNumber);                
-                MagicAttack();
+                animator.SetInteger("Motion", motionNumber); 
                 break;
         }
     }
@@ -207,11 +210,7 @@ public class Player : MonoBehaviour
     void StandAttack()
     {
         SetState(State.IDLE);
-    }
-    void MagicAttack()
-    {
-        SetState(State.IDLE);
-    }
+    } 
 
     void Jump()
     {
@@ -258,11 +257,56 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float damage)
+    {
+        if (isHit == false)
+        {
+            currentHP -= (int)damage;
+            int knockbackDir = isFacingRight ? -1 : 1;
+            rb.AddForce(new Vector2(knockbackDir, 1) * 2.5f, ForceMode2D.Impulse);
+            isHit = true;  
+            isJumping = true;
+            state = State.FALL;
+            StartCoroutine("OnHitLayerChangeCoroutine");
+            StartCoroutine("OnHitColorChangeCoroutine");
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.collider.CompareTag("Platform")|| collision.collider.CompareTag("Ground"))
         {
             isJumping = false;
-        }     
+        }
+        if(collision.collider.CompareTag("Enemy")==true)
+        {
+            if (collision.collider.TryGetComponent(out Enemy monster))
+            {
+                TakeDamage(monster.damage);                
+            }
+        }
     }   
+
+    IEnumerator OnHitLayerChangeCoroutine()
+    {        
+        gameObject.layer = gameObject.layer = LayerMask.NameToLayer("Hit");
+        yield return new WaitForSeconds(3);
+        gameObject.layer = gameObject.layer = LayerMask.NameToLayer("Player");
+        isHit = false;        
+        yield return null;
+    }
+
+    IEnumerator OnHitColorChangeCoroutine()
+    {
+        Color initColor = new Color(1f, 1f, 1f, 1f);  
+        Color blinkColor = new Color(0.39f, 0.39f, 0.39f, 1f);
+        for(int i = 0; i<5; i++)
+        {
+            spriteRenderer.color = blinkColor;
+            yield return new WaitForSeconds(.15f);
+            spriteRenderer.color = initColor;
+            yield return new WaitForSeconds(.15f);
+        }
+        spriteRenderer.color = initColor;
+    }
 }

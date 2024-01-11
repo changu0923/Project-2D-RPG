@@ -5,8 +5,12 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
 {
+    public string mobName;
     public int currentHP;
     public int maxHP;
+    public float damage;
+    public int exp;
+
 
     public abstract void TakeDamage(float damage);
 }

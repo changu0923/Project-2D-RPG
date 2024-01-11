@@ -52,6 +52,7 @@ public class MagicClawStart : MonoBehaviour
 
     private void AnimationEnd()
     {
-        Destroy(thisPrefab);
+        player.SetState(Player.State.IDLE);
+        Destroy(thisPrefab);        
     }
 }
