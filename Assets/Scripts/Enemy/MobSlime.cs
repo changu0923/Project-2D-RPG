@@ -20,6 +20,7 @@ public class MobSlime : Enemy
     float lifeTime = 1f;
     bool isHit;
     bool isMoveable;
+    bool isDead;
 
     DamagePopup popup;
     SpriteRenderer spriteRenderer;
@@ -104,19 +105,23 @@ public class MobSlime : Enemy
     public override void TakeDamage(float damage)
     {
         popup.PrintDamage((int)damage);
-        currentHP -= (int)damage;
-        isHit = true;
-        SetState(SlimeState.HIT);
-        StartCoroutine("KnockBackCoroutine");
-        if (currentHP <= 0)
+        if (isDead != true)
         {
-            currentHP = 0;
-            Die();
+            currentHP -= (int)damage;
+            isHit = true;
+            SetState(SlimeState.HIT);
+            StartCoroutine("KnockBackCoroutine");
+            if (currentHP <= 0)
+            {
+                currentHP = 0;
+                Die();
+            }
         }
     }
 
     public void Die()
     {
+        isDead = true;
         GameObject player = GameObject.Find("Player");
         player.GetComponent<Player>().GainExp(exp);
         SetState(SlimeState.DIE);        
