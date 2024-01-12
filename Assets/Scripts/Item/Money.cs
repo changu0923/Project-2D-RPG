@@ -24,6 +24,7 @@ public class Money : Item
     }
     public void SpawnMoney(int amount, Transform target)
     {
+        GameObject dropMoney;
         if( amount>0 && amount<50 )
         {
             dropMoney = bronzeCoinPrefab;
