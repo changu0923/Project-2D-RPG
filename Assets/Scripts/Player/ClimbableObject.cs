@@ -8,7 +8,7 @@ public class ClimbableObject : MonoBehaviour
     {
         if(collision.CompareTag("Player")==true)
         {
-            print($"{collision.name}이 사다리 Enter");
+            //print($"{collision.name}이 사다리 Enter");
             collision.GetComponent<Player>().isClimbAble = true;
         }
     }
@@ -17,7 +17,7 @@ public class ClimbableObject : MonoBehaviour
     {
         if (collision.CompareTag("Player") == true)
         {   
-            print($"{collision.name}이 사다리 Exit");
+            //print($"{collision.name}이 사다리 Exit");
             collision.GetComponent<Player>().isClimbAble = false;
         }
     }

@@ -37,8 +37,7 @@ public class MobSlime : Enemy
     }
 
     void Start()
-    {
-        maxHP = 300000;
+    {       
         currentHP = maxHP;
         state = SlimeState.IDLE;
     }
@@ -118,7 +117,9 @@ public class MobSlime : Enemy
 
     public void Die()
     {
-        SetState(SlimeState.DIE);
+        GameObject player = GameObject.Find("Player");
+        player.GetComponent<Player>().GainExp(exp);
+        SetState(SlimeState.DIE);        
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         gameObject.tag = "Dead";
         StartCoroutine("FadeOutAndDestroy");

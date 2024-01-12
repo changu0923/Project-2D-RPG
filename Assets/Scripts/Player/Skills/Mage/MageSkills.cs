@@ -84,10 +84,6 @@ public class MageSkills : Skill
             meteor.transform.parent = gameObject.transform;
             isCoolTime = true;
             StartCoroutine(CoolTimeWaitingCoroutine(1.5f, 3f, 0f));
-        }
-        else
-        {
-            print($"{Time.deltaTime} : 메테오 쿨타임 진행중");
-        }
+        }        
     }
 }

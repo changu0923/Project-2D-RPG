@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     public int maxHP;
     public int maxMP;
     public int maxEXP;
+    public int level = 1;
 
     public float moveSpeed;
     public float jumpPower;
@@ -53,6 +54,7 @@ public class Player : MonoBehaviour
 
     public State state;
     public AttackMotion attackMotion;
+
     public void SetState(State newState)
     {
         state = newState;
@@ -111,7 +113,8 @@ public class Player : MonoBehaviour
                 break;
             case State.SIT:
                 break;             
-        }   animator.SetInteger("State", (int)state);       
+        }   animator.SetInteger("State", (int)state);
+        CheckOnGround();
     }
 
     // TODO : 이동, 점프, 사다리타기, 아래점프, 위로 올라가기, 눕기, 스프라이트 뒤집기
@@ -228,9 +231,8 @@ public class Player : MonoBehaviour
             rb.velocity = Vector2.zero;
             animator.SetBool("isJumping", false);
             SetState(State.IDLE);
-        }
+        }        
     }
-
     
     void Climb()
     {        
@@ -263,13 +265,34 @@ public class Player : MonoBehaviour
         {
             currentHP -= (int)damage;
             int knockbackDir = isFacingRight ? -1 : 1;
-            rb.AddForce(new Vector2(knockbackDir, 1) * 2.5f, ForceMode2D.Impulse);
+            rb.AddForce(new Vector2((float)(knockbackDir*1.5), 1.5f) * 2.5f, ForceMode2D.Impulse);
             isHit = true;  
             isJumping = true;
             state = State.FALL;
             StartCoroutine("OnHitLayerChangeCoroutine");
             StartCoroutine("OnHitColorChangeCoroutine");
         }
+        else
+        {
+            CheckOnGround();
+        }
+    }
+
+    public void GainExp(int exp)
+    {
+        currentEXP += exp;
+        if (currentEXP>=maxEXP) 
+        {
+            currentEXP -= maxEXP;
+            LevelUP();            
+        }
+    }
+
+    public void LevelUP()
+    {
+        maxEXP = maxEXP + (int)(maxEXP * 0.1);
+        currentHP = maxHP;
+        currentMP = maxMP;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -285,7 +308,19 @@ public class Player : MonoBehaviour
                 TakeDamage(monster.damage);                
             }
         }
-    }   
+    }
+
+    private void CheckOnGround()
+    {        
+        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+        Vector2 center = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
+        RaycastHit2D hit = Physics2D.Raycast(center, Vector2.down);
+        float distance = Vector2.Distance(center, hit.point);
+        if(distance == 0.1)
+        {
+            isJumping = false;
+        }        
+    }
 
     IEnumerator OnHitLayerChangeCoroutine()
     {        
