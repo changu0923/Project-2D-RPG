@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     SpriteRenderer spriteRenderer;
     Animator animator;
     Skill skill;
+    public DropInfoText dropInfoText;
     public Transform attactPointLeft;
     public Transform attactPointRight;
     public Transform currentAttackPoint = null;
@@ -281,6 +282,7 @@ public class Player : MonoBehaviour
     public void GainExp(int exp)
     {
         currentEXP += exp;
+        dropInfoText.UpdateExpText(exp);
         if (currentEXP>=maxEXP) 
         {
             currentEXP -= maxEXP;

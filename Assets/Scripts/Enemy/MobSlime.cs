@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -56,6 +57,7 @@ public class MobSlime : Enemy
             case SlimeState.HIT:
                 break;
             case SlimeState.DIE:
+                animator.SetBool("isDead", true);
                 break;
         }
         animator.SetInteger("SlimeState", (int)state);
@@ -70,29 +72,32 @@ public class MobSlime : Enemy
 
     void Move()
     {
-        if (isHit == true)
+        if (isDead == false)
         {
-            // TODO : 플레이어방향으로 이동
-            GameObject player = GameObject.Find("Player"); 
-            Vector3 playerPosition = player.transform.position;
-            Vector3 direction = (playerPosition - transform.position).normalized;
-            rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
-        }
-        else
-        {
-            // TODO : 무지성 이동
+            if (isHit == true)
+            {
+                // TODO : 플레이어방향으로 이동
+                GameObject player = GameObject.Find("Player");
+                Vector3 playerPosition = player.transform.position;
+                Vector3 direction = (playerPosition - transform.position).normalized;
+                rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
+            }
+            else
+            {
+                // TODO : 무지성 이동
 
-        }
+            }
 
-        // 이동하는 방향에 따라 스프라이트 뒤집기
-        if (rb.velocity.x < 0)
-        {
-            spriteRenderer.flipX = false;
-        }
-        else if (rb.velocity.x > 0)
-        {
-            spriteRenderer.flipX = true;
-        }
+            // 이동하는 방향에 따라 스프라이트 뒤집기
+            if (rb.velocity.x < 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+            else if (rb.velocity.x > 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+        }       
     }
    
    
