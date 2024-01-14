@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     Animator animator;
     Skill skill;
     public DropInfoText dropInfoText;
+    public GameObject levelUpEffectPrefab;
     public Transform attactPointLeft;
     public Transform attactPointRight;
     public Transform currentAttackPoint = null;
@@ -292,6 +293,11 @@ public class Player : MonoBehaviour
 
     public void LevelUP()
     {
+        GameObject levelupEffect = Instantiate(levelUpEffectPrefab, transform.position, Quaternion.identity);
+        GameObject ui = GameObject.Find("LevelNumber");
+        ui.GetComponent<UILevelNumber>().UpdateLevelImage();
+        levelupEffect.transform.parent = gameObject.transform;
+        level += 1;
         maxEXP = maxEXP + (int)(maxEXP * 0.1);
         currentHP = maxHP;
         currentMP = maxMP;
