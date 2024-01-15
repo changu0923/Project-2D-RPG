@@ -13,7 +13,14 @@ public class UILevelNumber : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
+        if (GameObject.Find("Player").TryGetComponent(out player))
+        {
+            player = GameObject.Find("Player").GetComponent<Player>();
+        }
+        else
+        {
+            player = null;
+        }
         UpdateLevelImage();
     }
 

@@ -18,7 +18,14 @@ public class HPBar : MonoBehaviour
     public float barAnimationSpeed = 2f;
     private void Start()
     {
-        player = GameObject.Find("Player").GetComponent<Player>();
+        if (GameObject.Find("Player").TryGetComponent(out player))
+        {
+            player = GameObject.Find("Player").GetComponent<Player>();
+        }
+        else
+        {
+            player = null;
+        }
         showHPBar();
     }
 
@@ -27,18 +34,21 @@ public class HPBar : MonoBehaviour
         showHPBar();
     }
     public void showHPBar()
-    {     
-        float updatedHP  = 1f - (float)player.currentHP / player.maxHP;
-        float updatedMP  = 1f - (float)player.currentMP / player.maxMP;
-        float updatedExp = 1f - (float)player.currentEXP / player.maxEXP;
+    {
+        if (player != null)
+        {
+            float updatedHP = 1f - (float)player.currentHP / player.maxHP;
+            float updatedMP = 1f - (float)player.currentMP / player.maxMP;
+            float updatedExp = 1f - (float)player.currentEXP / player.maxEXP;
 
-        currentHPBar.fillAmount = Mathf.Lerp(currentHPBar.fillAmount, updatedHP, barAnimationSpeed * Time.deltaTime);
-        currentMPBar.fillAmount = Mathf.Lerp(currentMPBar.fillAmount, updatedMP, barAnimationSpeed * Time.deltaTime);
-        currentExpBar.fillAmount = Mathf.Lerp(currentExpBar.fillAmount, updatedExp, barAnimationSpeed * Time.deltaTime);
+            currentHPBar.fillAmount = Mathf.Lerp(currentHPBar.fillAmount, updatedHP, barAnimationSpeed * Time.deltaTime);
+            currentMPBar.fillAmount = Mathf.Lerp(currentMPBar.fillAmount, updatedMP, barAnimationSpeed * Time.deltaTime);
+            currentExpBar.fillAmount = Mathf.Lerp(currentExpBar.fillAmount, updatedExp, barAnimationSpeed * Time.deltaTime);
 
-        HPText.text = $"[{player.currentHP}/{player.maxHP}]";
-        MPText.text = $"[{player.currentMP}/{player.maxMP}]";
-        EXPText.text = $"[{player.currentEXP}/{player.maxEXP}]";
-        //TODO: Name, Level
+            HPText.text = $"[{player.currentHP}/{player.maxHP}]";
+            MPText.text = $"[{player.currentMP}/{player.maxMP}]";
+            EXPText.text = $"[{player.currentEXP}/{player.maxEXP}]";
+            //TODO: Name, Level
+        }
     }
 }

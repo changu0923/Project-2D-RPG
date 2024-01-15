@@ -293,11 +293,11 @@ public class Player : MonoBehaviour
 
     public void LevelUP()
     {
-        GameObject levelupEffect = Instantiate(levelUpEffectPrefab, transform.position, Quaternion.identity);
-        GameObject ui = GameObject.Find("LevelNumber");
-        ui.GetComponent<UILevelNumber>().UpdateLevelImage();
+        GameObject levelupEffect = Instantiate(levelUpEffectPrefab, transform.position, Quaternion.identity);                
         levelupEffect.transform.parent = gameObject.transform;
         level += 1;
+        GameObject ui = GameObject.Find("LevelNumber");
+        ui.GetComponent<UILevelNumber>().UpdateLevelImage();
         maxEXP = maxEXP + (int)(maxEXP * 0.1);
         currentHP = maxHP;
         currentMP = maxMP;
