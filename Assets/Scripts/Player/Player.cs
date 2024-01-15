@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public enum State
@@ -27,12 +28,15 @@ public class Player : MonoBehaviour
         SWING   = 2,
     }
 
+    public string playerName = "zlÁ¸¹ý»ç";
+
     public int currentHP;
     public int currentMP;
     public int currentEXP;
     public int maxHP;
     public int maxMP;
     public int maxEXP;
+    public int money;
     public int level = 1;
 
     public float moveSpeed;
@@ -48,11 +52,13 @@ public class Player : MonoBehaviour
     SpriteRenderer spriteRenderer;
     Animator animator;
     Skill skill;
+    TextMeshProUGUI nameText;
+
     public DropInfoText dropInfoText;
     public GameObject levelUpEffectPrefab;
     public Transform attactPointLeft;
     public Transform attactPointRight;
-    public Transform currentAttackPoint = null;
+    public Transform currentAttackPoint;
 
     public State state;
     public AttackMotion attackMotion;
@@ -72,10 +78,13 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponent<Animator>();
         skill = GetComponent<Skill>();   
+        nameText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void Start()
     {
+        nameText.text = playerName;
+        currentAttackPoint = attactPointLeft; ;
         currentHP = maxHP;
         currentMP = maxMP;
         moveSpeed = 1.5f;
@@ -140,6 +149,14 @@ public class Player : MonoBehaviour
                 attackMotion = AttackMotion.SWING;
                 SetState(State.ATTACK);
                 skill.Use("MagicClaw");                
+            }
+
+
+            if(Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                skill.Use("FireArrow");
+                SetAttackMotion(AttackMotion.BOW);
+                SetState(State.ATTACK);
             }
 
             // TO JUMP
@@ -289,6 +306,12 @@ public class Player : MonoBehaviour
             currentEXP -= maxEXP;
             LevelUP();            
         }
+    }
+
+    public void EarnMoney(int money)
+    {
+        this.money += money;
+        dropInfoText.UpdateMoneyText(money);
     }
 
     public void LevelUP()

@@ -6,7 +6,6 @@ using UnityEngine.Assertions.Must;
 public class MageSkills : Skill
 {
     public GameObject fireArrowPrefab;
-    public GameObject fireArrowBasePrefab;
     public GameObject MeteorSkillPrefab;
     public GameObject MagicClawPrefab;
     public Transform shotPoint;
@@ -43,15 +42,11 @@ public class MageSkills : Skill
     private void FireArrow()
     {
         if (isCoolTime==false)
-        {    
+        {   
             GameObject arrow = Instantiate(fireArrowPrefab);
-            GameObject effect = Instantiate(fireArrowBasePrefab);
-            effect.transform.position = shotPoint.position;
-            effect.transform.rotation = shotPoint.rotation;
             arrow.transform.position = shotPoint.position;
             arrow.transform.rotation = shotPoint.rotation;
-            Destroy(arrow, 0.5f); Destroy(effect, 0.8f);
-
+            Destroy(arrow, 0.5f);
             isCoolTime = true;            
             StartCoroutine(CoolTimeWaitingCoroutine(0f, 1f, 0f));
         }       

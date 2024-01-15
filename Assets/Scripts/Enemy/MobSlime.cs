@@ -168,7 +168,7 @@ public class MobSlime : Enemy
 
     public void DropItem()
     {
-        GameObject dropMoney = Instantiate(moneyItems[0], transform.position, Quaternion.identity);
+        GameObject dropMoney = Instantiate(moneyItems[0], transform.position, Quaternion.identity); 
     }
 
     IEnumerator FadeOutAndDestroy()
