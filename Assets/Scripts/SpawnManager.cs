@@ -10,6 +10,9 @@ public class SpawnManager : MonoBehaviour
     public List<GameObject> killedEnemies;
     public int numberToSpawnEnemies;
 
+    public Transform movePointRight;
+    public Transform movePointLeft;
+
 
     int spawnedCount;
     int killedCount;

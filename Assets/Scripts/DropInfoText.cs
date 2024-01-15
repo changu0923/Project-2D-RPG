@@ -40,7 +40,7 @@ public class DropInfoText : MonoBehaviour
     //}
 
     IEnumerator InfoTextReset()
-    {
+    {        
         dropInfoText.alpha = 1.0f;
         float fadeDuration = 5f;
         float elapsedTime = 0f;
@@ -50,6 +50,6 @@ public class DropInfoText : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        dropInfoText.alpha = 0f;
+        dropInfoText.alpha = 0f;              
     }
 }

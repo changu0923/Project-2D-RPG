@@ -22,11 +22,13 @@ public class MobSlime : Enemy
     bool isHit;
     bool isMoveable;
     bool isDead;
+    bool moveRight;
 
     DamagePopup popup;
     SpriteRenderer spriteRenderer;
     Animator animator;
     Rigidbody2D rb;
+    Transform currentMoveTarget;
     
     SlimeState state;
 
@@ -42,6 +44,16 @@ public class MobSlime : Enemy
     {       
         currentHP = maxHP;
         state = SlimeState.IDLE;
+        isMoveable = true;
+        int move = UnityEngine.Random.Range(0, 2);
+        if(move == 0)
+        {
+            moveRight = false;
+        }
+        else
+        {
+            moveRight = true;
+        }
     }
 
     private void Update()
@@ -65,9 +77,10 @@ public class MobSlime : Enemy
 
     void Idle()
     {
+        isMoveable = true;
         rb.velocity = Vector2.zero;
-        int RandomSeconds = UnityEngine.Random.Range(3, 6);
-
+        int RandomSeconds = UnityEngine.Random.Range(2, 5);
+        StartCoroutine(ChooseAction(RandomSeconds));        
     }
 
     void Move()
@@ -84,8 +97,31 @@ public class MobSlime : Enemy
             }
             else
             {
-                // TODO : 무지성 이동
+                print($"{gameObject.name}: Move - Patrol 상태입니다.");
+                GameObject spawnManager = GameObject.Find("SpawnManager");
+                if (spawnManager != null)
+                {
+                    Transform movePointLeft = spawnManager.GetComponent<SpawnManager>().movePointLeft;
+                    Transform movePointRight = spawnManager.GetComponent<SpawnManager>().movePointRight;
+                    if (Mathf.Abs(transform.position.x - movePointLeft.position.x) < 0.25f)
+                    {
+                        moveRight = true;
+                        SetState(SlimeState.IDLE);                        
+                        print($"{gameObject.name}: Move - 왼쪽에 근접한 상태입니다.");
+                    }
+                    else if (Mathf.Abs(transform.position.x - movePointRight.position.x) < 0.25f)
+                    {
+                        moveRight = false;
+                        SetState(SlimeState.IDLE);                        
+                        print($"{gameObject.name}: Move - 오른쪽에 근접한 상태입니다.");
+                    }
 
+                    currentMoveTarget = moveRight ? movePointRight : movePointLeft;
+
+                    print($"{gameObject.name}: {currentMoveTarget}으로 이동시도중");
+                    Vector3 direction = (currentMoveTarget.position - transform.position).normalized;
+                    rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
+                }               
             }
 
             // 이동하는 방향에 따라 스프라이트 뒤집기
@@ -167,12 +203,18 @@ public class MobSlime : Enemy
     }
 
     IEnumerator ChooseAction(int time)
-    {
+    {        
         if (isMoveable == true)
         {
+            print($"{gameObject.name}+{Time.time} : Idle->Move 변겅중");
+            isMoveable = false;
             yield return new WaitForSeconds(time);
+            SetState(SlimeState.MOVE);
+            yield return null;
         }
         else
+        {            
             yield return null;
+        }
     }
 }
