@@ -97,7 +97,6 @@ public class MobSlime : Enemy
             }
             else
             {
-                print($"{gameObject.name}: Move - Patrol 상태입니다.");
                 GameObject spawnManager = GameObject.Find("SpawnManager");
                 if (spawnManager != null)
                 {
@@ -106,19 +105,14 @@ public class MobSlime : Enemy
                     if (Mathf.Abs(transform.position.x - movePointLeft.position.x) < 0.25f)
                     {
                         moveRight = true;
-                        SetState(SlimeState.IDLE);                        
-                        print($"{gameObject.name}: Move - 왼쪽에 근접한 상태입니다.");
+                        SetState(SlimeState.IDLE);                                                
                     }
                     else if (Mathf.Abs(transform.position.x - movePointRight.position.x) < 0.25f)
                     {
                         moveRight = false;
-                        SetState(SlimeState.IDLE);                        
-                        print($"{gameObject.name}: Move - 오른쪽에 근접한 상태입니다.");
+                        SetState(SlimeState.IDLE);                                                
                     }
-
-                    currentMoveTarget = moveRight ? movePointRight : movePointLeft;
-
-                    print($"{gameObject.name}: {currentMoveTarget}으로 이동시도중");
+                    currentMoveTarget = moveRight ? movePointRight : movePointLeft;                    
                     Vector3 direction = (currentMoveTarget.position - transform.position).normalized;
                     rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
                 }               
@@ -168,7 +162,13 @@ public class MobSlime : Enemy
         SetState(SlimeState.DIE);        
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         gameObject.tag = "Dead";
+        DropItem();
         StartCoroutine("FadeOutAndDestroy");
+    }
+
+    public void DropItem()
+    {
+        GameObject dropMoney = Instantiate(moneyItems[0], transform.position, Quaternion.identity);
     }
 
     IEnumerator FadeOutAndDestroy()
@@ -206,7 +206,6 @@ public class MobSlime : Enemy
     {        
         if (isMoveable == true)
         {
-            print($"{gameObject.name}+{Time.time} : Idle->Move 변겅중");
             isMoveable = false;
             yield return new WaitForSeconds(time);
             SetState(SlimeState.MOVE);

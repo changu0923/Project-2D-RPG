@@ -11,6 +11,8 @@ public abstract class Enemy : MonoBehaviour
     public float damage;
     public int exp;
 
+    public GameObject[] dropableItems;
+    public GameObject[] moneyItems;
 
-    public abstract void TakeDamage(float damage);
+    public abstract void TakeDamage(float damage); 
 }

@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - Dead
   - Climb
+  - Item
   layers:
   - Default
   - TransparentFX

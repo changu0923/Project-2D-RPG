@@ -187,6 +187,9 @@ MonoBehaviour:
   maxHP: 50
   damage: 10
   exp: 10
+  dropableItems: []
+  moneyItems:
+  - {fileID: 4731670135547835246, guid: 107a127aff2b7a04593cab0c7af33428, type: 3}
   moveSpeed: 1
 --- !u!114 &5767129294346665603
 MonoBehaviour:
