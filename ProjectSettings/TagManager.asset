@@ -11,6 +11,7 @@ TagManager:
   - Dead
   - Climb
   - Item
+  - Tomb
   layers:
   - Default
   - TransparentFX

@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class CloudMove : MonoBehaviour
 {
-    public float moveSpeed = 0.3f;
-    SpriteRenderer spriteRenderer;
+    public float moveSpeed = 3f;
+    public float posValue;
 
-    private void Awake()
+    Vector2 startPos;
+    float newPos;
+
+    private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        startPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 offset = new Vector2(Time.deltaTime * moveSpeed, 0f);
-        spriteRenderer.material.mainTextureOffset = offset;
+        newPos = Mathf.Repeat(Time.time * moveSpeed, posValue);
+        transform.position = startPos + Vector2.right * newPos;
     }
 }

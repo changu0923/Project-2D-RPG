@@ -59,6 +59,7 @@ public class Player : MonoBehaviour
     public Transform attactPointLeft;
     public Transform attactPointRight;
     public Transform currentAttackPoint;
+    public GameObject tombPrefab;
 
     public State state;
     public AttackMotion attackMotion;
@@ -83,7 +84,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        nameText.text = playerName;
+        // nameText.text = playerName;
         currentAttackPoint = attactPointLeft; ;
         currentHP = maxHP;
         currentMP = maxMP;
@@ -121,6 +122,7 @@ public class Player : MonoBehaviour
             case State.LADDER: 
                 break;
             case State.DEAD:
+                Die();
                 break;
             case State.SIT:
                 break;             
@@ -278,18 +280,40 @@ public class Player : MonoBehaviour
         }
     }
 
+    void Die()
+    {
+        rb.velocity = Vector2.zero;
+        gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
+        SetState(State.DEAD);
+        isMoveAble = false;
+    }
+
     public void TakeDamage(float damage)
     {
         if (isHit == false)
         {
-            currentHP -= (int)damage;
-            int knockbackDir = isFacingRight ? -1 : 1;
-            rb.AddForce(new Vector2((float)(knockbackDir*1.5), 1.5f) * 2.5f, ForceMode2D.Impulse);
-            isHit = true;  
-            isJumping = true;
-            state = State.FALL;
-            StartCoroutine("OnHitLayerChangeCoroutine");
-            StartCoroutine("OnHitColorChangeCoroutine");
+            if (state != State.DEAD)
+            {
+                currentHP -= (int)damage;
+                int knockbackDir = isFacingRight ? -1 : 1;
+                rb.AddForce(new Vector2((float)(knockbackDir * 1.5), 1.5f) * 2.5f, ForceMode2D.Impulse);
+                isHit = true;
+                isJumping = true;
+                state = State.FALL;
+                StartCoroutine("OnHitLayerChangeCoroutine");
+                StartCoroutine("OnHitColorChangeCoroutine");
+
+                if(currentHP <=0)
+                {
+                    currentHP = 0;
+                    Vector3 up = new Vector3(0f, 1f, 0f);
+                    Vector3 spawnLocation = gameObject.transform.position + up;
+                    GameObject tomb = Instantiate(tombPrefab, spawnLocation, Quaternion.identity);
+                    tomb.transform.parent = gameObject.transform;
+                    Die();
+                }
+            }
         }
         else
         {
@@ -355,9 +379,9 @@ public class Player : MonoBehaviour
 
     IEnumerator OnHitLayerChangeCoroutine()
     {        
-        gameObject.layer = gameObject.layer = LayerMask.NameToLayer("Hit");
+        gameObject.layer = LayerMask.NameToLayer("Hit");
         yield return new WaitForSeconds(3);
-        gameObject.layer = gameObject.layer = LayerMask.NameToLayer("Player");
+        gameObject.layer = LayerMask.NameToLayer("Player");
         isHit = false;        
         yield return null;
     }
@@ -374,5 +398,12 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(.15f);
         }
         spriteRenderer.color = initColor;
+    }
+
+    IEnumerator OnDieCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+        // TODO : »ç¸ÁÆË¾÷È£Ãâ
+        yield return null;
     }
 }

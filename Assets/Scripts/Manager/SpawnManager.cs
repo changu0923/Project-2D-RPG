@@ -16,7 +16,6 @@ public class SpawnManager : MonoBehaviour
 
     int spawnedCount;
     int killedCount;
-    bool isSpawnAble;
 
     private void Start()
     {
@@ -32,17 +31,6 @@ public class SpawnManager : MonoBehaviour
             SpawnMobs();
 
             yield return new WaitForSeconds(10);
-        }
-    }
-    void CheckKilledCount()
-    {
-        if(killedCount > (int)spawnedCount/2) 
-        { 
-            isSpawnAble = true;
-        }
-        else
-        {
-            isSpawnAble = false;
         }
     }
 
