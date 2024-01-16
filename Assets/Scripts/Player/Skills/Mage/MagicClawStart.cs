@@ -35,7 +35,7 @@ public class MagicClawStart : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
         player.SetAttackMotion(Player.AttackMotion.SWING);
         if (hit.collider.tag == ("Enemy"))
-        {
+        { 
             Transform target = hit.collider.GetComponent<Transform>();
             if (target != null)
             {
