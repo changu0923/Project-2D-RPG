@@ -43,7 +43,7 @@ public class MagicClawStart : MonoBehaviour
                 magicClawHit.transform.parent = target.transform;
             }
         }
-        else
+        else if(hit.collider != null)
         {
             print($"MagicClaw : {hit.collider.name}");
         }

@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     }
 
     public string playerName = "playerName";
+    public string currentJob = "¸¶¹ý»ç";
 
     public int currentHP;
     public int currentMP;
@@ -38,6 +39,7 @@ public class Player : MonoBehaviour
     public int maxEXP;
     public int money;
     public int level = 1;
+
 
     public float moveSpeed;
     public float jumpPower;
@@ -53,6 +55,8 @@ public class Player : MonoBehaviour
     Animator animator;
     Skill skill;
     TextMeshProUGUI nameText;
+    public TextMeshProUGUI bottomNameText;
+    public TextMeshProUGUI jobNameText;
 
     public DropInfoText dropInfoText;
     public GameObject levelUpEffectPrefab;
@@ -84,7 +88,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        // nameText.text = playerName;
+        jobNameText.text = currentJob;
         currentAttackPoint = attactPointLeft; ;
         currentHP = maxHP;
         currentMP = maxMP;
@@ -92,7 +96,18 @@ public class Player : MonoBehaviour
         jumpPower = 5f; // 4.5f;
         rb.velocity = Vector3.zero;
         isMoveAble = true;        
-        SetState(State.IDLE);
+        SetState(State.IDLE);        
+
+        if(!object.ReferenceEquals(GameManager.Instance.gameObject, null))
+        {
+            playerName = GameManager.Instance.getString;
+            nameText.text = playerName;
+            bottomNameText.text = playerName;
+        }
+        else
+        {
+            print("getNameFailed");
+        }
     }   
     private void Update()
     {

@@ -41,15 +41,22 @@ public class MageSkills : Skill
 
     private void FireArrow()
     {
-        if (isCoolTime==false)
-        {   
-            GameObject arrow = Instantiate(fireArrowPrefab);
-            arrow.transform.position = shotPoint.position;
-            arrow.transform.rotation = shotPoint.rotation;
-            Destroy(arrow, 0.5f);
-            isCoolTime = true;            
-            StartCoroutine(CoolTimeWaitingCoroutine(0f, 1f, 0f));
-        }       
+        if (player.level >= 10)
+        {
+            if (player.currentMP >= 15)
+            {
+                if (isCoolTime == false)
+                {
+                    player.currentMP -= 15;
+                    GameObject arrow = Instantiate(fireArrowPrefab);
+                    arrow.transform.position = shotPoint.position;
+                    arrow.transform.rotation = shotPoint.rotation;
+                    Destroy(arrow, 0.5f);
+                    isCoolTime = true;
+                    StartCoroutine(CoolTimeWaitingCoroutine(0f, 1f, 0f));
+                }
+            }
+        }
     } 
 
     private void Teleport()
@@ -65,20 +72,31 @@ public class MageSkills : Skill
     }
     private void MagicClaw()
     {
-        GameObject magicClaw = Instantiate(MagicClawPrefab, gameObject.transform.position, Quaternion.identity);
-        magicClaw.transform.parent = gameObject.transform;
-        isCoolTime = true;
-        StartCoroutine(CoolTimeWaitingCoroutine(1f, .74f, 0f)); 
+        if (player.currentMP >= 5)
+        {
+            player.currentMP -= 5;
+            GameObject magicClaw = Instantiate(MagicClawPrefab, gameObject.transform.position, Quaternion.identity);
+            magicClaw.transform.parent = gameObject.transform;
+            isCoolTime = true;
+            StartCoroutine(CoolTimeWaitingCoroutine(1f, .74f, 0f));
+        }
     }
 
     private void MeteorShower()
     {
-        if (isCoolTime == false)
+        if (player.level >= 20)
         {
-            GameObject meteor = Instantiate(MeteorSkillPrefab, gameObject.transform.position, Quaternion.identity);
-            meteor.transform.parent = gameObject.transform;
-            isCoolTime = true;
-            StartCoroutine(CoolTimeWaitingCoroutine(1.5f, 3f, 0f));
-        }        
+            if (player.currentMP == 100)
+            {
+                if (isCoolTime == false)
+                {
+                    player.currentMP -= 100;
+                    GameObject meteor = Instantiate(MeteorSkillPrefab, gameObject.transform.position, Quaternion.identity);
+                    meteor.transform.parent = gameObject.transform;
+                    isCoolTime = true;
+                    StartCoroutine(CoolTimeWaitingCoroutine(1.5f, 3f, 0f));
+                }
+            }
+        }
     }
 }

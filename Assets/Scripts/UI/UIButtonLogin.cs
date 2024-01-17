@@ -17,7 +17,7 @@ public class UIButtonLogin : MonoBehaviour
     public void OnButtonClicked()
     {
         GameManager.Instance.getString = playerNameInputField.text;
-        GameManager.Instance.sceneLoader.LoadScene("TestScene"); // TODO : 게임씬 전환
+        GameManager.Instance.sceneLoader.LoadScene("BattleScene");
     }
 
 }
