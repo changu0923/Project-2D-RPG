@@ -15,10 +15,10 @@ public abstract class Item : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(ExpirationTime());
+        
     }
 
-    IEnumerator ExpirationTime()
+    public IEnumerator ExpirationTime()
     {
         float currentTime = 0f;
         while(currentTime<=existTime)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using static Player;
 
 public class MageSkills : Skill
 {
@@ -41,12 +42,14 @@ public class MageSkills : Skill
 
     private void FireArrow()
     {
-        if (player.level >= 10)
+        if (player.level >= 5)
         {
             if (player.currentMP >= 15)
             {
                 if (isCoolTime == false)
                 {
+                    player.SetAttackMotion(AttackMotion.BOW);
+                    player.SetState(State.ATTACK);
                     player.currentMP -= 15;
                     GameObject arrow = Instantiate(fireArrowPrefab);
                     arrow.transform.position = shotPoint.position;
@@ -74,6 +77,8 @@ public class MageSkills : Skill
     {
         if (player.currentMP >= 5)
         {
+            player.SetAttackMotion(AttackMotion.SWING);
+            player.SetState(State.ATTACK);
             player.currentMP -= 5;
             GameObject magicClaw = Instantiate(MagicClawPrefab, gameObject.transform.position, Quaternion.identity);
             magicClaw.transform.parent = gameObject.transform;
@@ -84,13 +89,15 @@ public class MageSkills : Skill
 
     private void MeteorShower()
     {
-        if (player.level >= 20)
+        if (player.level >= 10)
         {
-            if (player.currentMP == 100)
+            if (player.currentMP >= 30)
             {
                 if (isCoolTime == false)
                 {
-                    player.currentMP -= 100;
+                    player.SetAttackMotion(AttackMotion.NORMAL);
+                    player.SetState(State.ATTACK);
+                    player.currentMP -= 30;
                     GameObject meteor = Instantiate(MeteorSkillPrefab, gameObject.transform.position, Quaternion.identity);
                     meteor.transform.parent = gameObject.transform;
                     isCoolTime = true;

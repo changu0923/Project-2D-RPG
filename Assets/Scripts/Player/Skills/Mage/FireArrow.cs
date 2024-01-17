@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FireArrow : MonoBehaviour
 {
-    public float damage;
+    float damage;
     public float speed = 0.5f;
     public GameObject hitPrefab;
     public GameObject effectPrefab;
@@ -25,7 +25,11 @@ public class FireArrow : MonoBehaviour
         isArrowFacingRight = player.isFacingRight;
         GameObject shotEffect = Instantiate(effectPrefab, player.currentAttackPoint.position, Quaternion.identity);
         shotEffect.GetComponentInChildren<SpriteRenderer>().flipX = isArrowFacingRight ? true : false;
+
+        damage = (player.level * 5f) + damage * 0.6f + 200f;
+        
         Destroy(shotEffect, 0.5f);
+
     }
 
     private void Update()
@@ -45,7 +49,7 @@ public class FireArrow : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {        
         if(collision.CompareTag("Enemy") == true)
-        {
+        {          
             int minDamage = (int)(damage - (damage * 0.1));
             int maxDamage = (int)(damage + (damage * 0.1));
 

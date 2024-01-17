@@ -8,7 +8,7 @@ public class MoneyBronzeCoin : Item
     Rigidbody2D rb;
     Player player;
     int value = 10;
-
+    
     private void Awake()
     {
         circleCollider = GetComponent<CircleCollider2D>();
@@ -19,6 +19,7 @@ public class MoneyBronzeCoin : Item
     private void Start()
     {
         rb.AddForce(Vector3.up * 4f, ForceMode2D.Impulse);
+        StartCoroutine(ExpirationTime());      
     }
 
     private void Update()
@@ -52,5 +53,4 @@ public class MoneyBronzeCoin : Item
             Physics2D.IgnoreCollision(circleCollider, collision.collider, false);
         }
     }
-
 }

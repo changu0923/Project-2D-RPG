@@ -84,6 +84,7 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         skill = GetComponent<Skill>();   
         nameText = GetComponentInChildren<TextMeshProUGUI>();
+        currentJob = "¸¶¹ý»ç";
     }
 
     private void Start()
@@ -95,7 +96,8 @@ public class Player : MonoBehaviour
         moveSpeed = 1.5f;
         jumpPower = 5f; // 4.5f;
         rb.velocity = Vector3.zero;
-        isMoveAble = true;        
+        isMoveAble = true;
+        StartCoroutine(RestoreCoroutine());
         SetState(State.IDLE);        
 
         if(!object.ReferenceEquals(GameManager.Instance.gameObject, null))
@@ -157,23 +159,17 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 skill.Use("MeteorShower");
-                SetAttackMotion(AttackMotion.NORMAL);
-                SetState(State.ATTACK);
             }
 
             if(Input.GetKeyDown(KeyCode.Z)) 
-            {
-                attackMotion = AttackMotion.SWING;
-                SetState(State.ATTACK);
+            {                
                 skill.Use("MagicClaw");                
             }
 
 
             if(Input.GetKeyDown(KeyCode.LeftControl))
             {
-                skill.Use("FireArrow");
-                SetAttackMotion(AttackMotion.BOW);
-                SetState(State.ATTACK);
+                skill.Use("FireArrow");                
             }
 
             // TO JUMP
@@ -420,5 +416,21 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(3f);
         // TODO : »ç¸ÁÆË¾÷È£Ãâ
         yield return null;
+    }
+
+    IEnumerator RestoreCoroutine()
+    {
+        while(true) 
+        {
+            if(state!=State.DEAD)
+            {
+                currentMP += 10;
+                if(currentMP>maxMP)
+                {
+                    currentMP = maxMP;
+                }
+            }
+            yield return new WaitForSeconds(5f);
+        }
     }
 }
