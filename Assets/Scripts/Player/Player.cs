@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
         SWING   = 2,
     }
 
-    public string playerName = "zlÁ¸¹ý»ç";
+    public string playerName = "playerName";
 
     public int currentHP;
     public int currentMP;
@@ -248,7 +248,8 @@ public class Player : MonoBehaviour
     {
         // ¶¥¿¡ ´ê¾ÒÀ» ¶§
         if(isJumping==false)
-        {            
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
             animator.SetBool("isJumping", false);
             SetState(State.IDLE);
         }        

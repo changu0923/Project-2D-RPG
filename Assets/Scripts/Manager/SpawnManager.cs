@@ -6,43 +6,61 @@ public class SpawnManager : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject[] enemyPrefabs;
-    public List<GameObject> spawnedEnemies;
-    public List<GameObject> killedEnemies;
-    public int numberToSpawnEnemies;
 
     public Transform movePointRight;
     public Transform movePointLeft;
 
-
-    int spawnedCount;
-    int killedCount;
-
+    List<GameObject> spawnedEnemies = new List<GameObject>();
+    bool isMobCountZero;
+    [SerializeField] Coroutine activatedCoroutine;
     private void Start()
     {
-        SpawnMobs();
-        StartCoroutine(SpawnerCoroutine());
+        activatedCoroutine = StartCoroutine(SpawnerCoroutine());        
     }
 
     IEnumerator SpawnerCoroutine()
     {
-        while (true)
+        CheckMobsCount();
+        while (isMobCountZero==true)
         {
-
+            isMobCountZero = false;
             SpawnMobs();
-
             yield return new WaitForSeconds(10);
         }
     }
 
     void SpawnMobs()
-    {        
+    {
+        int numberToSpawnEnemies = spawnPoints.Length;
         for(int i=0; i<numberToSpawnEnemies; i++)
         {
             int randomMobIndex = Random.Range(0, enemyPrefabs.Length);
-            int randomSpawnPointIndex = Random.Range(0, spawnPoints.Length);
-            Transform randomSpawnPoint = spawnPoints[randomSpawnPointIndex];
-            GameObject spawnMob = Instantiate(enemyPrefabs[randomMobIndex], randomSpawnPoint.position, Quaternion.identity);
+            float randomX = Random.Range(-1.5f, 1.5f);
+            Vector2 addX = new Vector2(randomX, 0f);
+            Vector2 randomSpawnPoint = (Vector2)spawnPoints[i].position + addX;
+            GameObject spawnMob = Instantiate(enemyPrefabs[randomMobIndex], randomSpawnPoint, Quaternion.identity);
             spawnedEnemies.Add(spawnMob);
         }       
+    }
+
+    void CheckMobsCount()
+    {
+        for (int i = 0; i < spawnedEnemies.Count; i++)
+        {
+            if (spawnedEnemies[i] == null)
+            {            
+                spawnedEnemies.RemoveAt(i);
+            }
+        }
+        
+        if (spawnedEnemies.Count == 0)
+        {
+            isMobCountZero = true;
+        }
+        else if(spawnedEnemies.Count != 0)
+        {
+            isMobCountZero = false;
+        }
+
     }
 }
