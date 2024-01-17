@@ -184,7 +184,24 @@ public class MobSlime : Enemy
 
             yield return null;
         }
-        Destroy(gameObject, 1f);
+        // Object Pool; 이용 안할때
+        // Destroy(gameObject, 1f);
+        gameObject.SetActive(false);
+    }
+
+    IEnumerator FadeInAndRespawn()
+    {
+        // 시작 시간
+        float startTime = Time.time;
+
+        while (Time.time < startTime + lifeTime)
+        {
+            float normalizedTime = (Time.time - startTime) / lifeTime;
+            Color currentColor = spriteRenderer.color;
+            spriteRenderer.color = new Color(currentColor.r, currentColor.g, currentColor.b, 0f + normalizedTime);
+
+            yield return null;
+        }
     }
 
     IEnumerator KnockBackCoroutine()
@@ -215,5 +232,28 @@ public class MobSlime : Enemy
         {            
             yield return null;
         }
+    }
+
+    private void OnEnable()
+    {
+
+        currentHP = maxHP;
+        state = SlimeState.IDLE;
+        isMoveable = true;
+        isHit = false;
+        isDead = false;
+        int move = UnityEngine.Random.Range(0, 2);
+        if (move == 0)
+        {
+            moveRight = false;
+        }
+        else
+        {
+            moveRight = true;
+        }
+        StartCoroutine(FadeInAndRespawn());
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
+        gameObject.tag = "Enemy";
+
     }
 }

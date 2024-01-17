@@ -15,16 +15,19 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] Coroutine activatedCoroutine;
     private void Start()
     {
+        SpawnMobs();
         activatedCoroutine = StartCoroutine(SpawnerCoroutine());        
     }
 
     IEnumerator SpawnerCoroutine()
-    {
-        CheckMobsCount();
-        while (isMobCountZero==true)
+    {        
+        while (true)
         {
-            isMobCountZero = false;
-            SpawnMobs();
+            CheckMobsCount();
+            if (isMobCountZero == true)
+            {
+                RespawnMobs();
+            }
             yield return new WaitForSeconds(10);
         }
     }
@@ -40,27 +43,39 @@ public class SpawnManager : MonoBehaviour
             Vector2 randomSpawnPoint = (Vector2)spawnPoints[i].position + addX;
             GameObject spawnMob = Instantiate(enemyPrefabs[randomMobIndex], randomSpawnPoint, Quaternion.identity);
             spawnedEnemies.Add(spawnMob);
+            isMobCountZero = false;
         }       
+    }
+
+    void RespawnMobs()
+    {
+        for (int i = 0; i < spawnedEnemies.Count; i++)
+        {
+            float randomX = Random.Range(-1.5f, 1.5f);
+            Vector2 addX = new Vector2(randomX, 0f);
+            Vector2 randomSpawnPoint = (Vector2)spawnPoints[i].position + addX;
+            spawnedEnemies[i].transform.position = randomSpawnPoint;
+            spawnedEnemies[i].SetActive(true);
+        }
     }
 
     void CheckMobsCount()
     {
+        int count = 0;
         for (int i = 0; i < spawnedEnemies.Count; i++)
         {
-            if (spawnedEnemies[i] == null)
-            {            
-                spawnedEnemies.RemoveAt(i);
+            if (spawnedEnemies[i].activeSelf == true)
+            {
+                count++;
             }
-        }
-        
-        if (spawnedEnemies.Count == 0)
+        }        
+        if (count == 0)
         {
             isMobCountZero = true;
         }
-        else if(spawnedEnemies.Count != 0)
+        else
         {
             isMobCountZero = false;
         }
-
     }
 }
