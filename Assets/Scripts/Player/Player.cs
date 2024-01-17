@@ -248,8 +248,7 @@ public class Player : MonoBehaviour
     {
         // ¶¥¿¡ ´ê¾ÒÀ» ¶§
         if(isJumping==false)
-        {
-            rb.velocity = Vector2.zero;
+        {            
             animator.SetBool("isJumping", false);
             SetState(State.IDLE);
         }        

@@ -5,28 +5,31 @@ using UnityEngine;
 public class PlatformControl : MonoBehaviour
 {    
     EdgeCollider2D edgeCollider;
-    PlatformEffector2D effector;
-    void Start()
+    Player player;
+    float currentPosY;
+
+    private void Awake()
     {
-        edgeCollider = GetComponent<EdgeCollider2D>();     
-        effector = GetComponent<PlatformEffector2D>();
+        player = FindObjectOfType<Player>();
+        edgeCollider=GetComponent<EdgeCollider2D>();
     }
 
-    public void PlayerUp()
+
+    private void Update()
     {
-        effector.rotationalOffset = 0;
+        CheckPlayerDown();
     }
 
-    public void PlayerDown()
+    void CheckPlayerDown()
     {
-        effector.rotationalOffset = 180;
-        StartCoroutine("PlatformDownCoolTimeCoroutine");
-    }
-
-    IEnumerator PlatformDownCoolTimeCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        PlayerUp();
-        yield return null;
+        currentPosY = transform.position.y - player.transform.position.y;
+        if (currentPosY > 0) 
+        {
+            edgeCollider.enabled = false;
+        }
+        else if(currentPosY < 0.2)
+        {
+            edgeCollider.enabled = true;
+        }
     }
 }
