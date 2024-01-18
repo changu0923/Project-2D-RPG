@@ -3,33 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatformControl : MonoBehaviour
-{    
-    EdgeCollider2D edgeCollider;
-    Player player;
-    float currentPosY;
-
-    private void Awake()
+{
+    public Collider2D currentPlatform;
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        player = FindObjectOfType<Player>();
-        edgeCollider=GetComponent<EdgeCollider2D>();
-    }
-
-
-    private void Update()
-    {
-        CheckPlayerDown();
-    }
-
-    void CheckPlayerDown()
-    {
-        currentPosY = transform.position.y - player.transform.position.y;
-        if (currentPosY > 0) 
+        if (collision.CompareTag("Player"))
         {
-            edgeCollider.enabled = false;
+            Physics2D.IgnoreCollision(collision.GetComponent<Collider2D>(), currentPlatform, true);
         }
-        else if(currentPosY < 0.2)
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
         {
-            edgeCollider.enabled = true;
+            Physics2D.IgnoreCollision(collision.GetComponent<Collider2D>(), currentPlatform, false);          
         }
     }
 }

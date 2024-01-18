@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -59,11 +60,13 @@ public class Player : MonoBehaviour
     public TextMeshProUGUI jobNameText;
 
     public DropInfoText dropInfoText;
+    public GameObject popUpDeadUI;
     public GameObject levelUpEffectPrefab;
     public Transform attactPointLeft;
     public Transform attactPointRight;
     public Transform currentAttackPoint;
     public GameObject tombPrefab;
+    GameObject spawnedTomb;
 
     public State state;
     public AttackMotion attackMotion;
@@ -113,6 +116,15 @@ public class Player : MonoBehaviour
     }   
     private void Update()
     {
+        if(isClimbAble==true) 
+        {
+            float yMove = Input.GetAxisRaw("Vertical");
+            if(yMove != 0)
+            {
+                SetState(State.CLIMB);
+            }
+        }      
+
         switch(state)
         {
             case State.IDLE:
@@ -135,6 +147,7 @@ public class Player : MonoBehaviour
                 Jump();
                 break;
             case State.CLIMB:
+                Climb();
                 break;
             case State.LADDER: 
                 break;
@@ -265,28 +278,16 @@ public class Player : MonoBehaviour
             SetState(State.IDLE);
         }        
     }
-    
-    void Climb()
-    {        
-        if (Input.GetAxisRaw("Vertical") != 0)
-        {
-            float y = Input.GetAxisRaw("Vertical");       
-            rb.velocity = new Vector2(0, y * moveSpeed);
-            print($"{rb.velocity}");
-        }
-        else
-        {
-            rb.velocity = Vector2.zero;
-        }
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
+    void Climb()
+    {
+        float yMove = Input.GetAxisRaw("Vertical");
+        rb.velocity = new Vector2(0f, yMove * moveSpeed);
+        rb.gravityScale = 0f;           
+        if(isClimbAble==false)
         {
-            rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
-            state = State.JUMP;
-        }if(isClimbAble==false)
-        {
-            rb.gravityScale = 1;
             rb.velocity = Vector2.zero;
+            rb.gravityScale = 1.2f;
             SetState(State.FALL);
         }
     }
@@ -297,7 +298,27 @@ public class Player : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
         SetState(State.DEAD);
+        currentEXP -= (int)(maxEXP * 0.1f);
+        if (currentEXP <= 0)
+        {
+            currentEXP = 0;
+        }
         isMoveAble = false;
+        popUpDeadUI.SetActive(true);
+    }
+
+    public void Respawn()
+    {
+        Destroy(spawnedTomb);       
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+        currentHP = maxHP;
+        currentMP = maxMP;
+        moveSpeed = 1.5f;
+        jumpPower = 5f;
+        rb.velocity = Vector3.zero;
+        isMoveAble = true;
+        SetState(State.IDLE);
     }
 
     public void TakeDamage(float damage)
@@ -320,8 +341,7 @@ public class Player : MonoBehaviour
                     currentHP = 0;
                     Vector3 up = new Vector3(0f, 1f, 0f);
                     Vector3 spawnLocation = gameObject.transform.position + up;
-                    GameObject tomb = Instantiate(tombPrefab, spawnLocation, Quaternion.identity);
-                    tomb.transform.parent = gameObject.transform;
+                    spawnedTomb = Instantiate(tombPrefab, spawnLocation, Quaternion.identity);
                     Die();
                 }
             }
@@ -375,6 +395,23 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Climb") == true)
+        {    
+            isClimbAble = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Climb") == true )
+        {
+            isClimbAble = false;
+        }
+    }
+
 
     private void CheckOnGround()
     {        
