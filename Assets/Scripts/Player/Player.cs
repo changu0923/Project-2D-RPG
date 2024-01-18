@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public class Player : MonoBehaviour
@@ -53,7 +51,7 @@ public class Player : MonoBehaviour
 
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
-    Animator animator;
+    public Animator animator;
     Skill skill;
     TextMeshProUGUI nameText;
     public AudioSource playerAudio;
@@ -118,7 +116,7 @@ public class Player : MonoBehaviour
         {
             print("getNameFailed");
         }
-    }   
+    }
     private void Update()
     {
         if(isClimbAble==true) 
@@ -128,7 +126,7 @@ public class Player : MonoBehaviour
             {
                 SetState(State.CLIMB);
             }
-        }      
+        }     
 
         switch(state)
         {
@@ -161,7 +159,8 @@ public class Player : MonoBehaviour
                 break;
             case State.SIT:
                 break;             
-        }   animator.SetInteger("State", (int)state);
+        }   
+        animator.SetInteger("State", (int)state);
         CheckOnGround(); 
     }
 

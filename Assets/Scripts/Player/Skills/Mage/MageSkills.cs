@@ -61,13 +61,16 @@ public class MageSkills : Skill
     {
         if (player.currentMP >= 5)
         {
-            player.SetAttackMotion(AttackMotion.SWING);
-            player.SetState(State.ATTACK);
-            player.currentMP -= 5;
-            GameObject magicClaw = Instantiate(MagicClawPrefab, gameObject.transform.position, Quaternion.identity);
-            magicClaw.transform.parent = gameObject.transform;
-            isCoolTime = true;
-            StartCoroutine(CoolTimeWaitingCoroutine(1f, .74f, 0f));
+            if (isCoolTime == false)
+            {
+                player.SetAttackMotion(AttackMotion.SWING);
+                player.SetState(State.ATTACK);
+                player.currentMP -= 5;
+                GameObject magicClaw = Instantiate(MagicClawPrefab, gameObject.transform.position, Quaternion.identity);
+                magicClaw.transform.parent = gameObject.transform;
+                isCoolTime = true;
+                StartCoroutine(CoolTimeWaitingCoroutine(1f, .74f, 0f));
+            }
         }
     }
 
