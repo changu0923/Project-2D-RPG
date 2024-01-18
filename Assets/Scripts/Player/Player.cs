@@ -115,6 +115,7 @@ public class Player : MonoBehaviour
         else
         {
             print("getNameFailed");
+            playerName = "법사";
         }
     }
     private void Update()
@@ -152,19 +153,14 @@ public class Player : MonoBehaviour
             case State.CLIMB:
                 Climb();
                 break;
-            case State.LADDER: 
-                break;
             case State.DEAD:
                 Die();
-                break;
-            case State.SIT:
-                break;             
+                break;         
         }   
         animator.SetInteger("State", (int)state);
         CheckOnGround(); 
     }
 
-    // TODO : 이동, 점프, 사다리타기, 아래점프, 위로 올라가기, 눕기, 스프라이트 뒤집기
     void Idle()
     {
         if (isMoveAble == true) 
@@ -186,6 +182,8 @@ public class Player : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.LeftControl))
             {
+                SetAttackMotion(AttackMotion.BOW);
+                SetState(State.ATTACK);
                 skill.Use("FireArrow");                
             }
 
@@ -235,7 +233,6 @@ public class Player : MonoBehaviour
 
     void Attack()
     {
-        // TODO : Attack -> 각 모션 설정 필요
         switch(attackMotion)
         {
             case AttackMotion.NORMAL:
@@ -296,15 +293,9 @@ public class Player : MonoBehaviour
     }
 
     void Die()
-    {
-        Vector3 up = new Vector3(0f, 1f, 0f);
-        Vector3 spawnLocation = gameObject.transform.position + up;
-        spawnedTomb = Instantiate(tombPrefab, spawnLocation, Quaternion.identity);
-        playerAudio.PlayOneShot(GameManager.Instance.soundManager.playerDie);
-        rb.velocity = Vector2.zero;
+    {     
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
-        SetState(State.DEAD);
         currentEXP -= (int)(maxEXP * 0.1f);
         if (currentEXP <= 0)
         {
@@ -345,8 +336,13 @@ public class Player : MonoBehaviour
 
                 if(currentHP <=0)
                 {
-                    currentHP = 0;                    
-                    Die();
+                    currentHP = 0;
+                    rb.velocity = Vector2.zero;
+                    Vector3 up = new Vector3(0f, 1f, 0f);
+                    Vector3 spawnLocation = gameObject.transform.position + up;
+                    spawnedTomb = Instantiate(tombPrefab, spawnLocation, Quaternion.identity);
+                    playerAudio.PlayOneShot(GameManager.Instance.soundManager.playerDie);
+                    SetState(State.DEAD);
                 }
             }
         }
@@ -425,7 +421,7 @@ public class Player : MonoBehaviour
         Vector2 center = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
         RaycastHit2D hit = Physics2D.Raycast(center, Vector2.down);
         float distance = Vector2.Distance(center, hit.point);
-        if(distance == 0.1)
+        if(distance == 0.1f)
         {
             isJumping = false;
         }        
@@ -452,14 +448,7 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(.15f);
         }
         spriteRenderer.color = initColor;
-    }
-
-    IEnumerator OnDieCoroutine()
-    {
-        yield return new WaitForSeconds(3f);
-        // TODO : 사망팝업호출
-        yield return null;
-    }
+    }  
 
     IEnumerator RestoreCoroutine()
     {

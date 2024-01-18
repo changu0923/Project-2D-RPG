@@ -100,25 +100,23 @@ public class MobSlime : Enemy
             }
             else
             {
-                GameObject spawnManager = GameObject.Find("SpawnManager");
-                if (spawnManager != null)
+                SpawnManager spawnManager = FindObjectOfType<SpawnManager>();
+                Transform movePointLeft = spawnManager.GetComponent<SpawnManager>().movePointLeft;
+                Transform movePointRight = spawnManager.GetComponent<SpawnManager>().movePointRight;
+                if (Mathf.Abs(transform.position.x - movePointLeft.position.x) < 0.25f)
                 {
-                    Transform movePointLeft = spawnManager.GetComponent<SpawnManager>().movePointLeft;
-                    Transform movePointRight = spawnManager.GetComponent<SpawnManager>().movePointRight;
-                    if (Mathf.Abs(transform.position.x - movePointLeft.position.x) < 0.25f)
-                    {
-                        moveRight = true;
-                        SetState(SlimeState.IDLE);                                                
-                    }
-                    else if (Mathf.Abs(transform.position.x - movePointRight.position.x) < 0.25f)
-                    {
-                        moveRight = false;
-                        SetState(SlimeState.IDLE);                                                
-                    }
-                    currentMoveTarget = moveRight ? movePointRight : movePointLeft;                    
-                    Vector3 direction = (currentMoveTarget.position - transform.position).normalized;
-                    rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
-                }               
+                    moveRight = true;
+                    SetState(SlimeState.IDLE);
+                }
+                else if (Mathf.Abs(transform.position.x - movePointRight.position.x) < 0.25f)
+                {
+                    moveRight = false;
+                    SetState(SlimeState.IDLE);
+                }
+                currentMoveTarget = moveRight ? movePointRight : movePointLeft;
+                Vector3 direction = (currentMoveTarget.position - transform.position).normalized;
+                rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
+
             }
 
             // 이동하는 방향에 따라 스프라이트 뒤집기
@@ -188,15 +186,12 @@ public class MobSlime : Enemy
             spriteRenderer.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f - normalizedTime);
 
             yield return null;
-        }
-        // Object Pool; 이용 안할때
-        // Destroy(gameObject, 1f);
+        } 
         gameObject.SetActive(false);
     }
 
     IEnumerator FadeInAndRespawn()
     {
-        // 시작 시간
         float startTime = Time.time;
 
         while (Time.time < startTime + lifeTime)
@@ -241,7 +236,6 @@ public class MobSlime : Enemy
 
     private void OnEnable()
     {
-
         currentHP = maxHP;
         state = SlimeState.IDLE;
         isMoveable = true;
@@ -259,6 +253,5 @@ public class MobSlime : Enemy
         StartCoroutine(FadeInAndRespawn());
         gameObject.layer = LayerMask.NameToLayer("Enemy");
         gameObject.tag = "Enemy";
-
     }
 }

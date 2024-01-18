@@ -267,7 +267,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &109741146
 GameObject:
@@ -475,7 +475,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &526786990
 GameObject:
@@ -761,6 +761,38 @@ Transform:
   - {fileID: 1035203068}
   m_Father: {fileID: 997785701}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &755496751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 755496752}
+  m_Layer: 0
+  m_Name: SpawnManagers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &755496752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755496751}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1053676954992949956}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &781750615
 GameObject:
@@ -2537,7 +2569,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1053676954992949958}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.323, y: -4.569, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2552,8 +2584,8 @@ Transform:
   - {fileID: 656839863}
   - {fileID: 1053676955127656176}
   - {fileID: 1053676955491271612}
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_Father: {fileID: 755496752}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1053676954992949958
 GameObject:
@@ -2566,7 +2598,7 @@ GameObject:
   - component: {fileID: 1053676954992949956}
   - component: {fileID: 1053676954992949959}
   m_Layer: 0
-  m_Name: SpawnManager
+  m_Name: SpawnManager1F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2676,7 +2708,7 @@ Transform:
   - {fileID: 5009621506496199950}
   - {fileID: 1283261275}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2321250628140885420
 Transform:
@@ -4606,6 +4638,8 @@ MonoBehaviour:
   isFacingRight: 0
   isMoveAble: 0
   isHit: 0
+  animator: {fileID: 0}
+  playerAudio: {fileID: 0}
   bottomNameText: {fileID: 5009621506154961093}
   jobNameText: {fileID: 5009621506647645373}
   dropInfoText: {fileID: 5009621505143494713}
@@ -4677,6 +4711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillLevel: 0
+  skillAudio: {fileID: 0}
   fireArrowPrefab: {fileID: 97054631706878493, guid: f9624aa9b3cd78040b2f6d1f1fa49f6f, type: 3}
   MeteorSkillPrefab: {fileID: 4307452996456108236, guid: c4892ee89d6534441b7beb309d7e7479, type: 3}
   MagicClawPrefab: {fileID: 3092583943227583136, guid: d450a1bbb7f80cc46b352309ed03fe37, type: 3}

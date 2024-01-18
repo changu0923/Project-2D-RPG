@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
     public SoundManager soundManager;
 
     public string getString;
-    AudioSource audioSourceBGM;
 
     private void Awake()
     {
@@ -26,19 +25,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         soundManager = GetComponent<SoundManager>();
-        sceneLoader = GetComponent<SceneLoader>();
-        audioSourceBGM = GetComponent<AudioSource>();
-        PlayBGM(GameManager.Instance.soundManager.titleBGM);
-    }
-
-    public void PlayBGM(AudioClip clip)
-    {
-        audioSourceBGM.clip = clip;
-        audioSourceBGM.Play();
-    }
-
-    public void StopBGM()
-    {
-        audioSourceBGM.Stop();
+        sceneLoader = GetComponent<SceneLoader>();          
     }
 }

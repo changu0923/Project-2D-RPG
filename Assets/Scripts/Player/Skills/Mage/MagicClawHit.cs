@@ -16,7 +16,7 @@ public class MagicClawHit : MonoBehaviour
     void Hit()
     {
         Enemy target = GetComponentInParent<Enemy>();
-        float damage = (player.level + 10f) + ((player.level + 10f) * .15f);
+        float damage = (player.level + 10f) + ((player.level + 10f) * .15f) + 50f;
         int minDamage = (int)(damage - (damage * 0.15));
         int maxDamage = (int)(damage + (damage * 0.15));
 

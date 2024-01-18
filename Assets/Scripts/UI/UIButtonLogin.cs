@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,9 +20,7 @@ public class UIButtonLogin : MonoBehaviour
     {
         btClickSound.PlayOneShot(btClickSound.clip);
         GameManager.Instance.getString = playerNameInputField.text;
-        GameManager.Instance.StopBGM();
-        GameManager.Instance.PlayBGM(GameManager.Instance.soundManager.battleBGM);
         GameManager.Instance.sceneLoader.LoadScene("BattleScene");
-    }
-
+        GameManager.Instance.soundManager.PlayBGM(GameManager.Instance.soundManager.battleBGM);
+    } 
 }
