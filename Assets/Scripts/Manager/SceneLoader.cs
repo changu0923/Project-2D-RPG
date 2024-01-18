@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     public Animator animator;
-    public float effectTime = 1.5f;
+    public float effectTime = 2f;
 
     public void LoadScene(string sceneName)
     {

@@ -13,8 +13,10 @@ public class UiButtonDead : MonoBehaviour
 
     public void OnRevive()
     {
-        print("respawn");
+        AudioSource uiAudio = gameObject.AddComponent<AudioSource>();
+        uiAudio.PlayOneShot(GameManager.Instance.soundManager.UIButtonClick);
         player.Respawn();
+        Destroy(uiAudio);
         parentGameObject.SetActive(false);
     }
 }

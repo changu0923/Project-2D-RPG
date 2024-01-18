@@ -56,6 +56,8 @@ public class Player : MonoBehaviour
     Animator animator;
     Skill skill;
     TextMeshProUGUI nameText;
+    public AudioSource playerAudio;
+
     public TextMeshProUGUI bottomNameText;
     public TextMeshProUGUI jobNameText;
 
@@ -67,6 +69,8 @@ public class Player : MonoBehaviour
     public Transform currentAttackPoint;
     public GameObject tombPrefab;
     GameObject spawnedTomb;
+
+    Coroutine currentCoroutine;
 
     public State state;
     public AttackMotion attackMotion;
@@ -82,6 +86,7 @@ public class Player : MonoBehaviour
     }    
     private void Awake()
     {
+        playerAudio = gameObject.AddComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -157,7 +162,7 @@ public class Player : MonoBehaviour
             case State.SIT:
                 break;             
         }   animator.SetInteger("State", (int)state);
-        CheckOnGround();
+        CheckOnGround(); 
     }
 
     // TODO : 이동, 점프, 사다리타기, 아래점프, 위로 올라가기, 눕기, 스프라이트 뒤집기
@@ -249,12 +254,10 @@ public class Player : MonoBehaviour
                 break;
         }
     }
-
     void BowAttack()
     {
         SetState(State.IDLE);
     }
-
     void StandAttack()
     {
         SetState(State.IDLE);
@@ -262,7 +265,8 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        isJumping = true; 
+        playerAudio.PlayOneShot(GameManager.Instance.soundManager.playerJump);
+        isJumping = true;
         animator.SetBool("isJumping", true);
         rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
         SetState(State.FALL);
@@ -294,6 +298,10 @@ public class Player : MonoBehaviour
 
     void Die()
     {
+        Vector3 up = new Vector3(0f, 1f, 0f);
+        Vector3 spawnLocation = gameObject.transform.position + up;
+        spawnedTomb = Instantiate(tombPrefab, spawnLocation, Quaternion.identity);
+        playerAudio.PlayOneShot(GameManager.Instance.soundManager.playerDie);
         rb.velocity = Vector2.zero;
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
@@ -338,10 +346,7 @@ public class Player : MonoBehaviour
 
                 if(currentHP <=0)
                 {
-                    currentHP = 0;
-                    Vector3 up = new Vector3(0f, 1f, 0f);
-                    Vector3 spawnLocation = gameObject.transform.position + up;
-                    spawnedTomb = Instantiate(tombPrefab, spawnLocation, Quaternion.identity);
+                    currentHP = 0;                    
                     Die();
                 }
             }
@@ -365,6 +370,7 @@ public class Player : MonoBehaviour
 
     public void EarnMoney(int money)
     {
+        playerAudio.PlayOneShot(GameManager.Instance.soundManager.itemPick);
         this.money += money;
         dropInfoText.UpdateMoneyText(money);
     }
@@ -374,6 +380,7 @@ public class Player : MonoBehaviour
         GameObject levelupEffect = Instantiate(levelUpEffectPrefab, transform.position, Quaternion.identity);                
         levelupEffect.transform.parent = gameObject.transform;
         level += 1;
+        playerAudio.PlayOneShot(GameManager.Instance.soundManager.playerLevelUp);
         GameObject ui = GameObject.Find("LevelNumber");
         ui.GetComponent<UILevelNumber>().UpdateLevelImage();
         maxEXP = maxEXP + (int)(maxEXP * 0.1);

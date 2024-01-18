@@ -34,11 +34,6 @@ public class MageSkills : Skill
         yield return new WaitForSeconds(coolTime);
         isCoolTime = false;
     }
-    IEnumerator CoolTimeTeleportCoroutine(float coolTime)
-    {
-        yield return new WaitForSeconds(coolTime);
-        isCoolTime = false;
-    }
 
     private void FireArrow()
     {
@@ -56,23 +51,12 @@ public class MageSkills : Skill
                     arrow.transform.rotation = shotPoint.rotation;
                     Destroy(arrow, 0.5f);
                     isCoolTime = true;
-                    StartCoroutine(CoolTimeWaitingCoroutine(0f, 1f, 0f));
+                    StartCoroutine(CoolTimeWaitingCoroutine(.75f, 1f, 0f));
                 }
             }
         }
     } 
 
-    private void Teleport()
-    {
-        if (isTeleport == false)
-        {          
-            // 여기에 텔레포트 스크립트 작성
-
-
-            isTeleport = true;
-            StartCoroutine("CoolTimeTeleportCoroutine", .36f);
-        }        
-    }
     private void MagicClaw()
     {
         if (player.currentMP >= 5)

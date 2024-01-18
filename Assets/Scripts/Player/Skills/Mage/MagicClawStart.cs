@@ -8,12 +8,14 @@ public class MagicClawStart : MonoBehaviour
     public GameObject MagicClawPrefab;
     public GameObject thisPrefab;
     SpriteRenderer spriteRenderer;
-    
+    AudioSource audioSource;
 
     private void Start()
     {
         player = GetComponentInParent<Player>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.PlayOneShot(GameManager.Instance.soundManager.magicClawUse);
     }
 
     private void Update()

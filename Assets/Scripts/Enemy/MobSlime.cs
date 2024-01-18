@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class MobSlime : Enemy
 {
@@ -29,11 +30,13 @@ public class MobSlime : Enemy
     Animator animator;
     Rigidbody2D rb;
     Transform currentMoveTarget;
-    
+    AudioSource audioSource;
+
     SlimeState state;
 
     private void Awake()
     {
+        audioSource = gameObject.AddComponent<AudioSource>();
         popup = GetComponent<DamagePopup>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -140,6 +143,7 @@ public class MobSlime : Enemy
     public override void TakeDamage(float damage)
     {
         popup.PrintDamage((int)damage);
+        audioSource.PlayOneShot(GameManager.Instance.soundManager.slimeDamage);
         if (isDead != true)
         {
             currentHP -= (int)damage;
@@ -162,6 +166,7 @@ public class MobSlime : Enemy
         SetState(SlimeState.DIE);        
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         gameObject.tag = "Dead";
+        audioSource.PlayOneShot(GameManager.Instance.soundManager.slimeDie);
         DropItem();
         StartCoroutine("FadeOutAndDestroy");
     }

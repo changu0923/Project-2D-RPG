@@ -15,6 +15,7 @@ public class FireArrow : MonoBehaviour
     int hitLimits = 3;
     Player player;
     bool isArrowFacingRight;
+    AudioSource fireArrowAudioSource;
 
     public void Start()
     {
@@ -25,7 +26,8 @@ public class FireArrow : MonoBehaviour
         isArrowFacingRight = player.isFacingRight;
         GameObject shotEffect = Instantiate(effectPrefab, player.currentAttackPoint.position, Quaternion.identity);
         shotEffect.GetComponentInChildren<SpriteRenderer>().flipX = isArrowFacingRight ? true : false;
-
+        fireArrowAudioSource = gameObject.AddComponent<AudioSource>();
+        fireArrowAudioSource.PlayOneShot(GameManager.Instance.soundManager.fireArrowUse);
         damage = (player.level * 5f) + damage * 0.6f + 200f;
         
         Destroy(shotEffect, 0.5f);

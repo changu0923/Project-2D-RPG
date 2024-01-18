@@ -7,6 +7,17 @@ public class MeteorStart : MonoBehaviour
     public GameObject fireballPrefab;
     public GameObject parentGameobject;
     Animator animator;
+    AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
+    private void Start()
+    {
+        audioSource.PlayOneShot(GameManager.Instance.soundManager.meteorUse);
+    }
     void StartFall()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
