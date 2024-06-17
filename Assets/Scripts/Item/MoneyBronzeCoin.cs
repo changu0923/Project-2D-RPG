@@ -26,7 +26,7 @@ public class MoneyBronzeCoin : Item
     {
         if(player!=null)
         {
-           if( Mathf.Abs( player.transform.position.x - gameObject.transform.position.x) < 0.15f )
+           if( Mathf.Abs( player.transform.position.x - gameObject.transform.position.x) < 0.15f && Mathf.Abs(player.transform.position.y - gameObject.transform.position.y) < 0.15f)
             {
                 Use();                
             }
