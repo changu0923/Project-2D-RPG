@@ -92,7 +92,6 @@ public class MobSlime : Enemy
         {
             if (isHit == true)
             {
-                // TODO : 플레이어방향으로 이동
                 GameObject player = GameObject.Find("Player");
                 Vector3 playerPosition = player.transform.position;
                 Vector3 direction = (playerPosition - transform.position).normalized;

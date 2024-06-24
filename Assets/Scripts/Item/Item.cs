@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public class Item : MonoBehaviour
 {
     string itemName;
     string itemDesc;
@@ -11,11 +11,9 @@ public abstract class Item : MonoBehaviour
     [Header("아이템 유통기한")]
     public float existTime = 30f;
 
-    public abstract void Use();
-
-    private void Start()
+    public virtual void Use()
     {
-        
+
     }
 
     public IEnumerator ExpirationTime()
